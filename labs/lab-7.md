@@ -1,6 +1,6 @@
 # Lab 7: Tuning Knobs
 
-**Duration:** ~15 minutes · **No new code** (behind? `git checkout workshop-complete` gives you the finished app)
+**Duration:** ~20 minutes · **No new code** (behind? `git checkout workshop-complete` gives you the finished app)
 
 ## Goal
 
@@ -76,6 +76,60 @@ Three numbers per configuration:
 
 Open `cmd/eval/main.go`: the metrics are ~60 readable lines. Nothing about
 evaluation is magic.
+
+## Watching the index: monitoring with Redis
+
+Everything so far measured *your queries*. Production search also needs you
+to watch *the index itself*, and Redis exposes all of it. The primary tool
+is `FT.INFO`:
+
+```bash
+docker exec workshop-redis redis-cli FT.INFO wands-local-all-minilm-l6-v2-flat
+```
+
+The output is long; these are the fields worth knowing by name:
+
+| Field | What it tells you | When to worry |
+| --- | --- | --- |
+| `num_docs` | documents in the index | drops or stalls during a load |
+| `percent_indexed` | background indexing progress (1 = done) | stuck below 1 for long |
+| `hash_indexing_failures` | documents Redis could not index | anything above 0 |
+| `total_indexing_time` | cumulative indexing cost (ms) | trending up release over release |
+| `vector_index_sz_mb` / memory fields | what your vectors actually cost | growth that outpaces the catalog |
+
+Now watch a reindex happen live. In one terminal, start a rebuild with the
+larger model (a heavier load, so there is something to watch):
+
+```bash
+go run ./cmd/searchd -reindex-only -model sentence-transformers/all-mpnet-base-v2
+```
+
+In another, poll the interesting fields while it runs:
+
+```bash
+for i in $(seq 1 15); do
+  docker exec workshop-redis redis-cli FT.INFO wands-local-all-mpnet-base-v2-flat \
+    | grep -A1 -E '^(num_docs|percent_indexed|hash_indexing_failures)$'
+  echo ---; sleep 1
+done
+```
+
+You will see `num_docs` climb and `percent_indexed` converge to 1. That
+loop, pointed at production and feeding a dashboard, is the essence of
+search monitoring. Two companions worth knowing:
+
+- **Key-level cost:** `docker exec workshop-redis redis-cli MEMORY USAGE
+  wands-local-all-minilm-l6-v2:<some product id>` shows what one embedded
+  product costs; `INFO memory` shows the whole instance.
+- **Redis Insight:** the GUI (installed as a VS Code extension in the
+  devcontainer, or as a [desktop app](https://redis.io/insight/)) connects
+  to `localhost:6379` and gives you the same index stats, key browsing,
+  and a query profiler, no CLI required.
+
+The app already exposes the service-side half of this story: `/healthz`
+for liveness, `/stats` for index status, and `meta.query_ms` in every
+search response as the latency signal you would export to your metrics
+system.
 
 ## What to bring to Lab 8
 

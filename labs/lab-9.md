@@ -46,6 +46,13 @@ Yours may differ, and that's the point. Read it off *your* table.
 4. **A classroom of one Redis:** set `WORKSHOP_RUN_ID` per participant and
    point everyone at one Redis Cloud database; the namespacing you saw in
    `config.yaml` exists for exactly this.
+5. **Production monitoring:** turn Lab 7's `FT.INFO` loop into real
+   telemetry. Export `num_docs`, `percent_indexed`,
+   `hash_indexing_failures`, and the memory fields alongside
+   `meta.query_ms` to your metrics system, alert on indexing failures and
+   latency percentiles, and re-run `make eval` on a schedule to catch
+   relevance drift before your users do. Redis Cloud and Redis Enterprise
+   ship these index metrics in their built-in dashboards.
 
 ## Where to go next
 
