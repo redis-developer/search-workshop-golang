@@ -145,18 +145,16 @@ func (s *Service) searchText(ctx context.Context, text string, f *filter.Express
 // embeddings cache when repeated), then find the nearest products
 // (Lab 3; Lab 4 adds the filter).
 func (s *Service) searchVector(ctx context.Context, text string, f *filter.Expression, k int) ([]map[string]any, error) {
-	// LAB 3 (reference solution): embed the query text, then run KNN.
-	vec, err := s.vec.Embed(ctx, text)
-	if err != nil {
-		return nil, fmt.Errorf("embedding query: %w", err)
-	}
-	q := query.NewVectorQuery(FieldEmbedding, vec).
-		NumResults(k).
-		ReturnFields(returnFields...)
-	// LAB 4: when f is non-nil, pre-filter the KNN candidates with
-	// q.Filter(f). See labs/lab-4.md.
+	// LAB 3: semantic KNN search:
+	//   1. embed the query text with s.vec.Embed(ctx, text) — the same
+	//      cached vectorizer that embedded the products
+	//   2. query.NewVectorQuery(FieldEmbedding, vec).
+	//        NumResults(k).ReturnFields(returnFields...)
+	//   3. execute with s.index.Query(ctx, q)
+	// (Ignore f for now — filters arrive in Lab 4.)
+	// See labs/lab-3.md.
 	_ = f
-	return s.index.Query(ctx, q)
+	return nil, fmt.Errorf("LAB 3: vector search not implemented — see labs/lab-3.md")
 }
 
 // searchHybrid fuses a lexical leg and a semantic leg server-side with
