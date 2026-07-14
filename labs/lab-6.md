@@ -1,6 +1,6 @@
 # Lab 6 — Faceting with Aggregations
 
-**Duration:** ~10 minutes · **Branch:** `lab-6-starter` · **Solution:** `lab-6-solution`
+**Duration:** ~10 minutes · **Catch-up branch:** `lab-6-starter` · **Solution:** `lab-6-solution`
 
 ## Goal
 
@@ -82,12 +82,13 @@ func (s *Service) Facets(ctx context.Context, limit int) ([]Facet, error) {
 curl -s 'localhost:8081/facets' | jq '.facets[:5]'
 ```
 
-Expect the sample's biggest classes with counts and average ratings, largest
-first. Cross-check one against a filter search:
+Expect the sample's biggest classes — Beds, Kitchen Mats, Bar Stools,
+Office Chairs — with counts and average ratings, largest first. Cross-check
+one against a filtered search:
 
 ```bash
 curl -s 'localhost:8081/facets' | jq '.facets[0]'
-curl -s 'localhost:8081/search?query=*anything*&class=<that class>&k=25' | jq '.matchedProducts | length'
+curl -s 'localhost:8081/search?query=bed&class=Beds&k=25' | jq '.matchedProducts | length'
 ```
 
 ```bash

@@ -1,6 +1,6 @@
 # Lab 1 — Local Embeddings with a Redis Cache
 
-**Duration:** ~15 minutes · **Branch:** `lab-1-starter` · **Solution:** `lab-1-solution`
+**Duration:** ~15 minutes · **Your branch:** `lab-1-starter` (stay here all workshop) · **Solution:** `lab-1-solution`
 
 ## Goal
 
@@ -110,17 +110,23 @@ schema in Lab 2.
 make run
 ```
 
-Startup now reaches the *next* missing piece (Lab 2's index), but first it
-prints:
+The first run downloads the model, then prints:
 
 ```
 embedding 600 products with sentence-transformers/all-MiniLM-L6-v2 (cached after the first run)...
 embedded in 40.0s
 ```
 
-Stop and rerun it: `embedded in 0.1s`. That difference is your cache working —
-check it in Redis: `docker exec -it workshop-redis redis-cli KEYS 'embedcache-*'`
+The service then keeps serving, and searches now fail with the *next*
+missing piece: `LAB 2: index creation and loading not implemented`.
+Progress!
+
+Stop it (Ctrl-C) and rerun: `embedded in 0.1s`. That difference is your
+cache working — see it in Redis:
+`docker exec -it workshop-redis redis-cli KEYS 'embedcache-*'`
 (then `HGETALL` one of them).
+
+With `make run` still running:
 
 ```bash
 make verify LAB=1

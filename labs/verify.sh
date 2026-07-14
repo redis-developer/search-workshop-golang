@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Checkpoint verification per lab: make verify LAB=<n>
-# Requires the service running (make run) for labs >= 1.
+# Requires the service running (make run) for labs >= 0.
 set -u
 
 BASE="${SEARCHD_URL:-http://localhost:8081}"
@@ -17,43 +17,56 @@ sys.exit(0 if ($2) else 1)
 " 2>/dev/null
 }
 
+# A product ID that is guaranteed to exist: the first one in the corpus.
+first_product_id() {
+  head -1 data/corpus.jsonl | python3 -c 'import json,sys; print(json.load(sys.stdin)["product_id"])' 2>/dev/null
+}
+
+# "ergonomic chair" is one of the sample's judged queries, so every
+# implemented strategy must return results for it.
+QUERY="ergonomic%20chair"
+
 case "$LAB" in
   0)
     [ -f data/corpus.jsonl ] || fail "data/corpus.jsonl missing — run 'make prep'"
     [ -f data/qrels.txt ]    || fail "data/qrels.txt missing — run 'make prep'"
-    curl -sf "$BASE/healthz" >/dev/null || fail "service not answering — run 'make run'"
-    pass "data prepared, Redis reachable, service up"
+    json /healthz "data.get('status') == 'ok'" \
+      || fail "service not answering — run 'make run' in another terminal"
+    pass "data prepared, Redis reachable, service up (searches unlock in Lab 1)"
     ;;
   1)
-    json /healthz "data.get('status') == 'ok'" || fail "/healthz not ok"
-    # Lab 1 succeeds when startup gets past embedding: cache keys exist.
+    json /healthz "data.get('status') == 'ok'" || fail "/healthz not ok — is 'make run' running?"
+    # Lab 1 succeeds when startup got past embedding: cache keys exist.
     docker exec workshop-redis redis-cli --scan --pattern 'embedcache-*' 2>/dev/null | head -1 | grep -q . \
-      || fail "no embedcache-* keys in Redis — embeddings not generated yet"
+      || fail "no embedcache-* keys in Redis — embeddings not generated yet (restart 'make run' and watch for the embedding message)"
     pass "embeddings generated and cached in Redis"
     ;;
   2)
-    json /stats "int(float(data.get('num_docs', 0))) == 600" \
-      || fail "/stats does not report 600 docs — index not loaded"
-    json /products/42 "'product_name' in data" || fail "/products/42 not fetchable"
-    pass "index created and 600 products loaded"
+    want=$(wc -l < data/corpus.jsonl | tr -d ' ')
+    json /stats "int(float(data.get('num_docs', 0))) == $want" \
+      || fail "/stats does not report $want docs — index not loaded (restart 'make run')"
+    pid=$(first_product_id)
+    [ -n "$pid" ] || fail "could not read a product id from data/corpus.jsonl"
+    json "/products/$pid" "'product_name' in data" || fail "/products/$pid not fetchable"
+    pass "index created and $want products loaded"
     ;;
   3)
-    json "/search?query=outdoor%20sofa&strategy=vector" \
+    json "/search?query=$QUERY&strategy=vector" \
       "len(data.get('matchedProducts', [])) > 0 and data['meta']['strategy'] == 'vector'" \
-      || fail "vector search returned no results"
+      || fail "vector search returned no results (restart 'make run' after pasting the code)"
     pass "vector search returns results"
     ;;
   4)
-    json "/search?query=outdoor%20sofa&strategy=vector&min_rating=4" \
-      "data['meta']['filtered'] and all(p['rating'] >= 4 for p in data['matchedProducts'])" \
-      || fail "filtered search missing or returned products below the rating floor"
+    json "/search?query=$QUERY&strategy=vector&min_rating=4" \
+      "data['meta']['filtered'] and len(data['matchedProducts']) > 0 and all(p['rating'] >= 4 for p in data['matchedProducts'])" \
+      || fail "filtered search missing, empty, or returned products below the rating floor"
     pass "filtered vector search enforces constraints"
     ;;
   5)
-    json "/search?query=outdoor%20sofa&strategy=hybrid" \
+    json "/search?query=$QUERY&strategy=hybrid" \
       "len(data.get('matchedProducts', [])) > 0 and data['meta']['strategy'] == 'hybrid'" \
       || fail "hybrid search returned no results"
-    json "/search?query=outdoor%20sofa&strategy=text" \
+    json "/search?query=$QUERY&strategy=text" \
       "data['meta']['strategy'] == 'text'" || fail "text strategy not answering"
     pass "text and hybrid strategies both answer"
     ;;

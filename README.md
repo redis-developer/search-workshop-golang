@@ -72,6 +72,7 @@ By the end of this workshop, you'll have a complete Redis-powered search app wit
 - ONNX Runtime (`brew install onnxruntime` on macOS; `apt install
   libonnxruntime` or the [official releases](https://onnxruntime.ai/docs/install/) on Linux)
 - [uv](https://docs.astral.sh/uv/) (only for Lab 8)
+- [jq](https://jqlang.org/) (optional — prettifies the checkpoint curls)
 
 Check your setup at any time:
 

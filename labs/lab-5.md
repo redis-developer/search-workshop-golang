@@ -1,6 +1,6 @@
 # Lab 5 — Hybrid Search with FT.HYBRID
 
-**Duration:** ~15 minutes · **Branch:** `lab-5-starter` · **Solution:** `lab-5-solution`
+**Duration:** ~15 minutes · **Catch-up branch:** `lab-5-starter` · **Solution:** `lab-5-solution`
 
 ## Goal
 
@@ -9,9 +9,10 @@ all three strategies switchable from the UI dropdown.
 
 ## Concepts
 
-- **Why hybrid?** In Lab 3 you saw vector search shine on intent (`comfy
-  couch`) and stumble on exactness (`all-clad 7 qt slow cooker`). BM25 has
-  the opposite profile. Hybrid runs both legs and fuses the rankings.
+- **Why hybrid?** In Lab 3 you saw vector search shine on intent
+  (paraphrases of “ergonomic chair”) and wobble on precise catalog
+  vocabulary (`anti fatigue mat`). BM25 has the opposite profile. Hybrid
+  runs both legs and fuses the rankings.
 - **`FT.HYBRID`** (Redis 8.4+) executes the text leg and the vector leg
   *inside Redis* and combines them server-side. No client-side merging, one
   round trip.
@@ -59,18 +60,19 @@ config.yaml, and execute with `s.index.Hybrid` — note: not `Query`;
 
 ## Checkpoint
 
-Restart, then work the dropdown on **one query at a time** and compare:
+Restart, then work the dropdown on **one query at a time** and compare the
+three strategies. Good contrasts from the sample's own judged queries:
 
-| Query | text | vector | hybrid |
-| --- | --- | --- | --- |
-| `all-clad 7 qt slow cooker` | nails it | drifts | nails it |
-| `comfy couch for a small living room` | literal | gets it | gets it |
-| `outdoor sofa` | decent | decent | best of both |
+| Query | What to watch for |
+| --- | --- |
+| `anti fatigue mat` | precise catalog vocabulary — lexical tends to lead |
+| `comfortable chair for long work days` | paraphrased intent — semantic tends to lead |
+| `ergonomic chair` (your followed query) | both legs contribute — where hybrid earns its keep |
 
 The footer shows the fusion in play: `hybrid/rrf · flat · all-minilm-l6-v2`.
 
 ```bash
-curl -s 'localhost:8081/search?query=outdoor+sofa&strategy=hybrid' | jq .meta
+curl -s 'localhost:8081/search?query=ergonomic+chair&strategy=hybrid' | jq .meta
 make verify LAB=5
 ```
 

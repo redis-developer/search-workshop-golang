@@ -1,6 +1,6 @@
 # Lab 3 — Vector Search
 
-**Duration:** ~10 minutes · **Branch:** `lab-3-starter` · **Solution:** `lab-3-solution`
+**Duration:** ~10 minutes · **Catch-up branch:** `lab-3-starter` · **Solution:** `lab-3-solution`
 
 ## Goal
 
@@ -47,24 +47,28 @@ execute. The filter argument is deliberately ignored — that's Lab 4.
 
 ## Checkpoint
 
-Restart `make run`, open <http://localhost:8081>, and search **`outdoor sofa`**.
+Restart `make run`, open <http://localhost:8081>, and search
+**`ergonomic chair`** — the query you're following.
 
-Products appear — and look at *what* appears: patio sofas and outdoor
-sectionals, even where descriptions never contain your exact words. The
+Products appear — and look at *what* appears: office and task chairs,
+including ones whose descriptions never contain the word “ergonomic”. The
 footer reads something like:
 
 ```
 vector · flat · all-minilm-l6-v2 → 14 ms
 ```
 
-Try queries that showcase semantics: `comfy couch for a small living room`,
-`something to keep drinks cold outside`. Then try `all-clad 7 qt slow cooker`
-— exact model names are where pure vector search starts to look shaky.
-Remember that observation for Lab 5.
+Try paraphrases that showcase semantics: `comfortable chair for long work
+days`, `something soft to sit on`. Then try an exact-vocabulary query like
+`anti fatigue mat` and compare it with a paraphrase (`standing desk floor
+cushion`) — precise catalog terms are where pure vector search starts to
+wobble. Remember that observation for Lab 5.
 
 ```bash
 make verify LAB=3
-curl -s 'localhost:8081/search?query=outdoor+sofa' | jq '.meta, .matchedProducts[0]'
+curl -s 'localhost:8081/search?query=ergonomic+chair' | jq '.meta, .matchedProducts[0]'
 ```
+
+(No `jq`? Drop the pipe — the raw JSON is small.)
 
 Next: [Lab 4 — Filtered vector search](lab-4.md)

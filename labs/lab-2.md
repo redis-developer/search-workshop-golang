@@ -1,6 +1,6 @@
 # Lab 2 — Schema, Index, and Loading Products
 
-**Duration:** ~15 minutes · **Branch:** `lab-2-starter` · **Solution:** `lab-2-solution`
+**Duration:** ~15 minutes · **Catch-up branch:** `lab-2-starter` · **Solution:** `lab-2-solution`
 
 ## Goal
 
@@ -160,12 +160,18 @@ algorithms *share* keys for the same model. Lab 8 exploits this.
 ```bash
 make run          # starts clean now
 curl -s localhost:8081/stats
-curl -s localhost:8081/products/42
 ```
 
 `/stats` should report `num_docs: 600` for `wands-local-all-minilm-l6-v2-flat`.
-Inspect the raw data too: `docker exec -it workshop-redis redis-cli HGETALL
-wands-local-all-minilm-l6-v2:42`.
+Fetch a single product — grab any `product_id` from the first line of
+`data/corpus.jsonl`, then:
+
+```bash
+curl -s localhost:8081/products/<that id>
+```
+
+Inspect the raw hash in Redis too: `docker exec -it workshop-redis
+redis-cli HGETALL wands-local-all-minilm-l6-v2:<that id>`.
 
 ```bash
 make verify LAB=2

@@ -54,22 +54,27 @@ from “look, results!” into engineering.
 
 ## What you should see
 
-An error: **the embedding provider is not implemented yet** (Lab 1). The
-HTTP layer, the UI, config loading — all provided and working. The search
-*internals* are yours to build. This page comes alive one lab at a time.
+An error: **`LAB 1: embedding provider not implemented`**. That's the
+workshop in one screenshot: the HTTP layer, the UI, config loading — all
+provided and working — while the search *internals* are yours to build.
+This page comes alive one lab at a time.
 
 ## Checkpoint
+
+Keep `make run` running, and in another terminal:
 
 ```bash
 make verify LAB=0
 ```
 
-Passes when `/healthz` answers and Redis is reachable.
+Passes when the data is prepared and the service answers.
 
 ## One query to follow
 
-Pick this query and re-run it in every lab: **`outdoor sofa`**. Watching how
-its results change — from error, to semantic matches, to filtered, to hybrid —
-is the workshop's story arc.
+Pick this query and re-run it in every lab: **`ergonomic chair`**. It's one
+of the sample's 24 *judged* queries — human annotators graded which products
+answer it — so you'll meet it again when the evaluation labs score your
+work. Watching its results change — from error, to semantic matches, to
+filtered, to hybrid — is the workshop's story arc.
 
 Next: [Lab 1 — Local embeddings with a Redis cache](lab-1.md)

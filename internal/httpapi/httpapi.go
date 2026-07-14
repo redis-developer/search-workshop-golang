@@ -15,22 +15,48 @@ import (
 )
 
 // Handler builds the service mux: the JSON API plus the embedded UI at /.
-func Handler(svc *search.Service, ui fs.FS) http.Handler {
+//
+// labErr carries a startup failure from a not-yet-implemented lab. When it
+// is non-nil the UI and /healthz still serve — the workshop's "empty
+// shelf" — while every search endpoint answers 503 with the lab error, so
+// students see exactly which lab to open next.
+func Handler(svc *search.Service, ui fs.FS, labErr error) http.Handler {
 	mux := http.NewServeMux()
 
+	notReady := func(w http.ResponseWriter) bool {
+		if labErr != nil || svc == nil {
+			msg := "service is not ready"
+			if labErr != nil {
+				msg = labErr.Error()
+			}
+			writeJSON(w, http.StatusServiceUnavailable, map[string]string{"error": msg})
+			return true
+		}
+		return false
+	}
+
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) {
-		status := map[string]any{"status": "ok", "index_ready": svc.Ready(r.Context())}
-		if err := svc.Ping(r.Context()); err != nil {
-			writeJSON(w, http.StatusServiceUnavailable, map[string]any{
-				"status": "degraded",
-				"error":  "redis unreachable: " + err.Error(),
-			})
-			return
+		status := map[string]any{"status": "ok", "index_ready": false}
+		if labErr != nil {
+			status["lab_error"] = labErr.Error()
+		}
+		if svc != nil {
+			if err := svc.Ping(r.Context()); err != nil {
+				writeJSON(w, http.StatusServiceUnavailable, map[string]any{
+					"status": "degraded",
+					"error":  "redis unreachable: " + err.Error(),
+				})
+				return
+			}
+			status["index_ready"] = svc.Ready(r.Context())
 		}
 		writeJSON(w, http.StatusOK, status)
 	})
 
 	mux.HandleFunc("GET /stats", func(w http.ResponseWriter, r *http.Request) {
+		if notReady(w) {
+			return
+		}
 		stats, err := svc.Stats(r.Context())
 		if err != nil {
 			writeError(w, http.StatusInternalServerError, err)
@@ -40,6 +66,9 @@ func Handler(svc *search.Service, ui fs.FS) http.Handler {
 	})
 
 	mux.HandleFunc("GET /products/{id}", func(w http.ResponseWriter, r *http.Request) {
+		if notReady(w) {
+			return
+		}
 		product, err := svc.Product(r.Context(), r.PathValue("id"))
 		if err != nil {
 			writeError(w, http.StatusInternalServerError, err)
@@ -59,6 +88,9 @@ func Handler(svc *search.Service, ui fs.FS) http.Handler {
 			writeError(w, http.StatusBadRequest, err)
 			return
 		}
+		if notReady(w) {
+			return
+		}
 		if !svc.Ready(r.Context()) {
 			writeJSON(w, http.StatusServiceUnavailable, map[string]string{
 				"error": "index not ready — run `make prep` and restart the service (or run `make reindex`)",
@@ -74,6 +106,9 @@ func Handler(svc *search.Service, ui fs.FS) http.Handler {
 	})
 
 	mux.HandleFunc("GET /facets", func(w http.ResponseWriter, r *http.Request) {
+		if notReady(w) {
+			return
+		}
 		limit, _ := strconv.Atoi(r.URL.Query().Get("limit"))
 		facets, err := svc.Facets(r.Context(), limit)
 		if err != nil {

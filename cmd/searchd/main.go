@@ -58,22 +58,37 @@ func run(configPath string, reindex, reindexOnly bool, algorithm, model, provide
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
+	// A failure from a not-yet-implemented lab must not stop the show:
+	// the UI and /healthz keep serving, and every search endpoint
+	// reports which lab to open next. Reindex runs still fail loudly.
+	var labErr error
 	svc, err := search.New(ctx, cfg)
 	if err != nil {
-		return err
+		if reindexOnly {
+			return err
+		}
+		labErr = err
+		svc = nil
 	}
-	defer svc.Close() //nolint:errcheck // shutdown path
-
-	if err := svc.EnsureIndex(ctx, reindex || reindexOnly); err != nil {
-		return err
+	if svc != nil {
+		defer svc.Close() //nolint:errcheck // shutdown path
+		if err := svc.EnsureIndex(ctx, reindex || reindexOnly); err != nil {
+			if reindexOnly {
+				return err
+			}
+			labErr = err
+		}
 	}
 	if reindexOnly {
 		return nil
 	}
+	if labErr != nil {
+		fmt.Fprintf(os.Stderr, "searchd starting without search: %v\n", labErr)
+	}
 
 	server := &http.Server{
 		Addr:              cfg.Server.Addr,
-		Handler:           httpapi.Handler(svc, web.FS),
+		Handler:           httpapi.Handler(svc, web.FS, labErr),
 		ReadHeaderTimeout: 5 * time.Second,
 	}
 

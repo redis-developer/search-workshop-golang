@@ -1,6 +1,6 @@
 # Lab 4 — Filtered Vector Search
 
-**Duration:** ~10 minutes · **Branch:** `lab-4-starter` · **Solution:** `lab-4-solution`
+**Duration:** ~10 minutes · **Catch-up branch:** `lab-4-starter` · **Solution:** `lab-4-solution`
 
 ## Goal
 
@@ -75,8 +75,8 @@ with:
 ## Checkpoint
 
 ```bash
-# similar sofas, but only well-reviewed ones
-curl -s 'localhost:8081/search?query=outdoor+sofa&min_rating=4&min_reviews=5' | jq '.meta.filtered, [.matchedProducts[].rating]'
+# similar chairs, but only well-reviewed ones
+curl -s 'localhost:8081/search?query=ergonomic+chair&min_rating=4&min_reviews=5' | jq '.meta.filtered, [.matchedProducts[].rating]'
 
 # constrain to one category
 curl -s 'localhost:8081/search?query=comfortable+seat&class=Office+Chairs' | jq '[.matchedProducts[].class]'
@@ -86,7 +86,7 @@ Every returned rating should be ≥ 4; every class should match. Try a filter
 that's too tight (`min_reviews=10000`) — an empty result is correct behavior,
 and exactly what a production API should return.
 
-Now the interesting question: run `outdoor sofa` unfiltered and with
+Now the interesting question: run `ergonomic chair` unfiltered and with
 `min_rating=4`. The filtered results are more *trustworthy* — but did you
 lose any highly relevant products that just lack reviews? Hold that thought:
 Lab 8 measures this exact trade-off (`vector` vs `vector_filtered`).

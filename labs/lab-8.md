@@ -1,6 +1,6 @@
 # Lab 8 — The Optimizer Study: Pick a Winner
 
-**Duration:** ~15 minutes · **Branch:** `lab-8` (= `lab-7`) · **No new Go code**
+**Duration:** ~15 minutes · **Continue on your branch** (catch-up: `lab-8`) · **No new Go code**
 
 ## Goal
 

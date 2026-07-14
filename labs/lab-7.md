@@ -1,6 +1,6 @@
 # Lab 7 — Tuning Knobs: Experiment, Observe, Measure
 
-**Duration:** ~15 minutes · **Branch:** `lab-7` (= `lab-6-solution`) · **No new code**
+**Duration:** ~15 minutes · **Continue on your branch** (catch-up: `lab-7`) · **No new code**
 
 ## Goal
 
