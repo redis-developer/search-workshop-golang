@@ -101,7 +101,7 @@ it could not do before. Watch the UI come alive as you go.
 | 4 | Filtered vector search | 10 min |
 | 5 | Hybrid search with `FT.HYBRID` | 15 min |
 | 6 | Faceting with aggregations | 10 min |
-| 7 | Tuning knobs: experiment, observe, measure | 15 min |
+| 7 | Tuning knobs and index monitoring | 20 min |
 | 8 | The optimizer study: pick a winner | 15 min |
 | 9 | Wrap-up and next experiments | 5 min |
 
