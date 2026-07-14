@@ -26,22 +26,36 @@ all three strategies switchable from the UI dropdown.
 
 ## Your task
 
-**`searchHybrid`** in `internal/search/queries.go`:
+One copy-paste step: in **`internal/search/queries.go`**, replace the
+entire `searchHybrid` function with:
 
-1. Embed the query (same as Lab 3).
-2. Build the query with both legs:
+```go
+func (s *Service) searchHybrid(ctx context.Context, text string, f *filter.Expression, k int) ([]map[string]any, error) {
+	vec, err := s.vec.Embed(ctx, text)
+	if err != nil {
+		return nil, fmt.Errorf("embedding query: %w", err)
+	}
+	q := query.NewHybridQuery(text, FieldSearchText, vec, FieldEmbedding).
+		NumResults(k).
+		ReturnFields(returnFields...)
+	if f != nil {
+		q.Filter(f)
+	}
+	switch s.cfg.Search.Hybrid.Fusion {
+	case config.FusionLinear:
+		q.CombineLinear(s.cfg.Search.Hybrid.Alpha)
+	default:
+		q.CombineRRF(s.cfg.Search.Hybrid.RRFWindow, s.cfg.Search.Hybrid.RRFConstant)
+	}
+	return s.index.Hybrid(ctx, q)
+}
+```
 
-   ```go
-   q := query.NewHybridQuery(text, FieldSearchText, vec, FieldEmbedding).
-       NumResults(k).
-       ReturnFields(returnFields...)
-   ```
-
-3. Attach the filter when non-nil (hybrid + filters compose!).
-4. Apply the configured fusion: `q.CombineRRF(window, constant)` or
-   `q.CombineLinear(alpha)` from `cfg.Search.Hybrid`.
-5. Execute with `s.index.Hybrid(ctx, q)` — note: not `Query`; `FT.HYBRID`
-   has its own execution path.
+Read it as five moves: embed the query (as in Lab 3), build a query with
+*both* legs (lexical text + semantic vector), attach the filter when
+present (hybrid + filters compose!), apply the fusion configured in
+config.yaml, and execute with `s.index.Hybrid` — note: not `Query`;
+`FT.HYBRID` has its own execution path.
 
 ## Checkpoint
 

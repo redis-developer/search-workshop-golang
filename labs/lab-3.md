@@ -21,19 +21,29 @@ nearest neighbors.
 
 ## Your task
 
-**`searchVector`** in `internal/search/queries.go`:
+One copy-paste step: in **`internal/search/queries.go`**, replace the
+entire `searchVector` function with:
 
-1. Embed the query text: `s.vec.Embed(ctx, text)`.
-2. Build the query:
+```go
+func (s *Service) searchVector(ctx context.Context, text string, f *filter.Expression, k int) ([]map[string]any, error) {
+	// LAB 3 (reference solution): embed the query text, then run KNN.
+	vec, err := s.vec.Embed(ctx, text)
+	if err != nil {
+		return nil, fmt.Errorf("embedding query: %w", err)
+	}
+	q := query.NewVectorQuery(FieldEmbedding, vec).
+		NumResults(k).
+		ReturnFields(returnFields...)
+	// LAB 4: when f is non-nil, pre-filter the KNN candidates with
+	// q.Filter(f). See labs/lab-4.md.
+	_ = f
+	return s.index.Query(ctx, q)
+}
+```
 
-   ```go
-   q := query.NewVectorQuery(FieldEmbedding, vec).
-       NumResults(k).
-       ReturnFields(returnFields...)
-   ```
-
-3. Execute with `s.index.Query(ctx, q)` and return the rows. (Ignore the
-   filter argument for now — that's Lab 4.)
+Read it top to bottom: embed the query with the *same cached vectorizer*
+that embedded the products, build a KNN query on the embedding field,
+execute. The filter argument is deliberately ignored — that's Lab 4.
 
 ## Checkpoint
 

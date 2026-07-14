@@ -29,13 +29,52 @@ ecommerce sidebar (“Sofas (127) · Beds (89) · …”).
 
 ## Your task
 
-In `internal/search/queries.go`:
+Two copy-paste steps, both in **`internal/search/queries.go`**.
 
-1. **`facetQuery.AggregateArgs`** — return the argument slice for the
-   pipeline above (mind the arity numbers after GROUPBY/REDUCE/SORTBY).
-2. **`Facets`** — execute via `s.index.Aggregate(ctx, facetQuery{limit})`
-   and map each row to a `Facet{Class, Count, AvgRating}` (rows are keyed
-   `product_class`, `count`, `avg_rating`).
+**Step 1** — replace the entire `AggregateArgs` method with:
+
+```go
+// AggregateArgs implements query.AggregationQuery.
+func (q facetQuery) AggregateArgs(indexName string) []any {
+	return []any{
+		"FT.AGGREGATE", indexName, "*",
+		"GROUPBY", 1, "@" + FieldClass,
+		"REDUCE", "COUNT", 0, "AS", "count",
+		"REDUCE", "AVG", 1, "@" + FieldAverageRating, "AS", "avg_rating",
+		"SORTBY", 2, "@count", "DESC",
+		"LIMIT", 0, q.limit,
+		"DIALECT", 2,
+	}
+}
+```
+
+Note the arity numbers after `GROUPBY`, `REDUCE`, and `SORTBY` — they count
+the arguments that follow, and getting them wrong is the classic
+`FT.AGGREGATE` mistake.
+
+**Step 2** — replace the entire `Facets` function with:
+
+```go
+// Facets aggregates the catalog by product class.
+func (s *Service) Facets(ctx context.Context, limit int) ([]Facet, error) {
+	if limit <= 0 {
+		limit = 25
+	}
+	rows, err := s.index.Aggregate(ctx, facetQuery{limit: limit})
+	if err != nil {
+		return nil, fmt.Errorf("aggregating facets: %w", err)
+	}
+	facets := make([]Facet, 0, len(rows))
+	for _, row := range rows {
+		facets = append(facets, Facet{
+			Class:     asString(row[FieldClass]),
+			Count:     int64(asFloat(row["count"])),
+			AvgRating: asFloat(row["avg_rating"]),
+		})
+	}
+	return facets, nil
+}
+```
 
 ## Checkpoint
 

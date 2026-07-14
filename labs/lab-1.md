@@ -23,18 +23,86 @@ cache.
 
 ## Your task
 
-All in `internal/embed/embed.go`:
+Everything happens in **`internal/embed/embed.go`**, in three copy-paste
+steps. (Read the code as you paste it — the point is understanding what it
+does, not typing it.)
 
-1. **`newProvider`** — construct the configured vectorizer:
-   - `config.ProviderHF` → `hf.New(ctx, hf.Config{...})` with the model,
-     batch size, and `onnxRuntimePath()` (provided) from the config.
-   - `config.ProviderOpenAI` → `vectorize.NewOpenAIVectorizer(ctx, ...)`.
-2. **`New`** — wrap the provider with cache-aside caching:
-   `cache.NewEmbeddingsCache(client, ...)` named `cfg.CacheName()`, then
-   `cache.NewCachedVectorizer(inner, embCache)`.
+**Step 1** — replace the `import` block at the top of the file with:
 
-Both constructors probe the model's dimensionality — you'll see `Dims()`
-drive the index schema in Lab 2.
+```go
+import (
+	"context"
+	"fmt"
+	"os"
+
+	"github.com/redis/go-redis/v9"
+
+	"github.com/redis-developer/redis-vl-golang/extensions/cache"
+	"github.com/redis-developer/redis-vl-golang/extensions/vectorize"
+	hf "github.com/redis-developer/redis-vl-golang/extensions/vectorize/hf"
+
+	"github.com/redis-developer/search-workshop-golang/internal/config"
+)
+```
+
+**Step 2** — replace the entire `New` function with:
+
+```go
+// New builds the configured vectorizer and wraps it in an EmbeddingsCache
+// stored on client. The cache is keyed by (content, model), so switching
+// models in config.yaml never serves stale vectors.
+func New(ctx context.Context, cfg *config.Config, client redis.UniversalClient) (*Vectorizer, error) {
+	// LAB 1 (reference solution): construct the configured embedding
+	// provider, then wrap it with cache-aside caching.
+	inner, err := newProvider(ctx, cfg)
+	if err != nil {
+		return nil, err
+	}
+
+	embCache := cache.NewEmbeddingsCache(client, cache.EmbeddingsCacheOptions{
+		Name: cfg.CacheName(),
+	})
+	cached := cache.NewCachedVectorizer(inner, embCache)
+
+	v := &Vectorizer{Vectorizer: cached, inner: inner}
+	if closer, ok := inner.(interface{ Close() error }); ok {
+		v.closer = closer.Close
+	}
+	return v, nil
+}
+```
+
+**Step 3** — replace the entire `newProvider` function with:
+
+```go
+// newProvider constructs the raw (uncached) vectorizer for the configured
+// provider.
+func newProvider(ctx context.Context, cfg *config.Config) (vectorize.Vectorizer, error) {
+	switch cfg.Embedding.Provider {
+	case config.ProviderHF:
+		// Local in-process embeddings: the model is downloaded from the
+		// Hugging Face Hub once, cached on disk, and executed through
+		// ONNX Runtime. No API key, no per-call network access.
+		return hf.New(ctx, hf.Config{
+			Model:           cfg.Embedding.Model,
+			BatchSize:       cfg.Embedding.BatchSize,
+			ONNXRuntimePath: onnxRuntimePath(),
+		})
+	case config.ProviderOpenAI:
+		// Hosted embeddings: requires OPENAI_API_KEY in the environment.
+		return vectorize.NewOpenAIVectorizer(ctx, vectorize.OpenAIConfig{
+			Model:     cfg.Embedding.Model,
+			BatchSize: cfg.Embedding.BatchSize,
+		})
+	default:
+		return nil, fmt.Errorf("unknown embedding provider %q", cfg.Embedding.Provider)
+	}
+}
+```
+
+Leave `onnxRuntimePath` and everything else untouched. Both constructors
+probe the model's dimensionality — you'll see `Dims()` drive the index
+schema in Lab 2.
 
 ## Checkpoint
 

@@ -26,13 +26,51 @@ enforce *what you require*.
 
 ## Your task
 
-In `internal/search/queries.go`:
+Two copy-paste steps, both in **`internal/search/queries.go`**.
 
-1. **`buildFilter`** — translate the request into an expression: `Class` →
-   tag equality, `MinRating` → `Num(...).Ge`, `MinReviews` → `Num(...).Ge`,
-   combined with `And`. Return `nil` when no constraint is set.
-2. **`searchVector`** — when the filter is non-nil, attach it:
-   `q.Filter(f)`.
+**Step 1** — replace the entire `buildFilter` function with:
+
+```go
+// buildFilter combines the request's catalog constraints into one filter
+// expression (Lab 4). Returns nil when unfiltered.
+func buildFilter(req Request) *filter.Expression {
+	var exprs []*filter.Expression
+	if req.Class != "" {
+		exprs = append(exprs, filter.Tag(FieldClass).Eq(req.Class))
+	}
+	if req.MinRating > 0 {
+		exprs = append(exprs, filter.Num(FieldAverageRating).Ge(req.MinRating))
+	}
+	if req.MinReviews > 0 {
+		exprs = append(exprs, filter.Num(FieldReviewCount).Ge(float64(req.MinReviews)))
+	}
+	if len(exprs) == 0 {
+		return nil
+	}
+	out := exprs[0]
+	if len(exprs) > 1 {
+		out = out.And(exprs[1:]...)
+	}
+	return out
+}
+```
+
+**Step 2** — in `searchVector`, replace the two lines
+
+```go
+	// LAB 4: when f is non-nil, pre-filter the KNN candidates with
+	// q.Filter(f). See labs/lab-4.md.
+	_ = f
+```
+
+with:
+
+```go
+	if f != nil {
+		// LAB 4 (reference solution): pre-filter the KNN candidates.
+		q.Filter(f)
+	}
+```
 
 ## Checkpoint
 
