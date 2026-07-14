@@ -17,8 +17,8 @@ import (
 // Handler builds the service mux: the JSON API plus the embedded UI at /.
 //
 // labErr carries a startup failure from a not-yet-implemented lab. When it
-// is non-nil the UI and /healthz still serve — the workshop's "empty
-// shelf" — while every search endpoint answers 503 with the lab error, so
+// is non-nil the UI and /healthz still serve (the workshop's "empty
+// shelf") while every search endpoint answers 503 with the lab error, so
 // students see exactly which lab to open next.
 func Handler(svc *search.Service, ui fs.FS, labErr error) http.Handler {
 	mux := http.NewServeMux()
@@ -93,7 +93,7 @@ func Handler(svc *search.Service, ui fs.FS, labErr error) http.Handler {
 		}
 		if !svc.Ready(r.Context()) {
 			writeJSON(w, http.StatusServiceUnavailable, map[string]string{
-				"error": "index not ready — run `make prep` and restart the service (or run `make reindex`)",
+				"error": "index not ready; run `make prep` and restart the service (or run `make reindex`)",
 			})
 			return
 		}

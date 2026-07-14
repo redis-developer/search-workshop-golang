@@ -1,10 +1,10 @@
-# Lab 9 — Wrap-Up and Next Experiments
+# Lab 9: Wrap-Up and Next Experiments
 
 **Duration:** ~5 minutes
 
 ## What you built
 
-A production-shaped Go search service — not a notebook:
+A production-shaped Go search service, not a notebook:
 
 - Local, key-free embeddings (ONNX) behind a Redis embeddings cache
 - A schema-driven index with text, tag, numeric, and vector fields
@@ -19,7 +19,7 @@ instead of the loudest opinion.
 
 ## Stating the recommendation
 
-A good wrap-up sentence has all four parts — configuration, evidence, cost,
+A good wrap-up sentence has all four parts: configuration, evidence, cost,
 and the next experiment. For example, from a typical run of this sample:
 
 > “Ship **MiniLM + HNSW + hybrid/RRF** (nDCG 0.754, ~1.6 ms): hybrid beats
@@ -28,7 +28,7 @@ and the next experiment. For example, from a typical run of this sample:
 > validate on full WANDS (43k products), where the index-type differences
 > should actually appear.”
 
-Yours may differ — that's the point. Read it off *your* table.
+Yours may differ, and that's the point. Read it off *your* table.
 
 ## Take-home experiments
 
@@ -44,15 +44,15 @@ Yours may differ — that's the point. Read it off *your* table.
    your real business constraints (in-stock, shippable, margin) and re-read
    the `_filtered` rows.
 4. **A classroom of one Redis:** set `WORKSHOP_RUN_ID` per participant and
-   point everyone at one Redis Cloud database — the namespacing you saw in
+   point everyone at one Redis Cloud database; the namespacing you saw in
    `config.yaml` exists for exactly this.
 
 ## Where to go next
 
 - [RedisVL for Golang documentation](https://redis-developer.github.io/redis-vl-golang/redisvl/current/)
 - [Redis Retrieval Optimizer](https://github.com/redis-applied-ai/redis-retrieval-optimizer)
-  — grid and Bayesian studies, beyond the search study used here
-- [WANDS](https://github.com/wayfair/WANDS) — the dataset's paper and full
+  for grid and Bayesian studies, beyond the search study used here
+- [WANDS](https://github.com/wayfair/WANDS): the dataset's paper and full
   judgment methodology
 
-Thank you for building — and measuring — with Redis. 🚀
+Thank you for building, and measuring, with Redis. 🚀

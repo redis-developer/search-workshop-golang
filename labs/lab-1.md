@@ -1,11 +1,11 @@
-# Lab 1 — Local Embeddings with a Redis Cache
+# Lab 1: Local Embeddings with a Redis Cache
 
 **Duration:** ~15 minutes
 
 ## Goal
 
-Give the service the ability to turn text into vectors — locally, in-process,
-with no API keys — and make repeated embeddings free with a Redis-backed
+Give the service the ability to turn text into vectors (locally, in-process,
+with no API keys) and make repeated embeddings free with a Redis-backed
 cache.
 
 ## Concepts
@@ -18,16 +18,16 @@ cache.
   ONNX Runtime. Offline-capable, key-free, and its output is verified
   byte-for-byte against Python sentence-transformers.
 - **Cache-aside:** embedding the same text twice is wasted compute. The
-  `EmbeddingsCache` stores vectors in Redis keyed by `(content, model)` —
+  `EmbeddingsCache` stores vectors in Redis keyed by `(content, model)`,
   so switching models never serves stale vectors.
 
 ## Your task
 
 Everything happens in **`internal/embed/embed.go`**, in three copy-paste
-steps. (Read the code as you paste it — the point is understanding what it
+steps. (Read the code as you paste it: the point is understanding what it
 does, not typing it.)
 
-**Step 1** — replace the `import` block at the top of the file with:
+**Step 1**: replace the `import` block at the top of the file with:
 
 ```go
 import (
@@ -45,7 +45,7 @@ import (
 )
 ```
 
-**Step 2** — replace the entire `New` function with:
+**Step 2**: replace the entire `New` function with:
 
 ```go
 // New builds the configured vectorizer and wraps it in an EmbeddingsCache
@@ -72,7 +72,7 @@ func New(ctx context.Context, cfg *config.Config, client redis.UniversalClient) 
 }
 ```
 
-**Step 3** — replace the entire `newProvider` function with:
+**Step 3**: replace the entire `newProvider` function with:
 
 ```go
 // newProvider constructs the raw (uncached) vectorizer for the configured
@@ -101,7 +101,7 @@ func newProvider(ctx context.Context, cfg *config.Config) (vectorize.Vectorizer,
 ```
 
 Leave `onnxRuntimePath` and everything else untouched. Both constructors
-probe the model's dimensionality — you'll see `Dims()` drive the index
+probe the model's dimensionality; you'll see `Dims()` drive the index
 schema in Lab 2.
 
 ## Checkpoint
@@ -122,7 +122,7 @@ missing piece: `LAB 2: index creation and loading not implemented`.
 Progress!
 
 Stop it (Ctrl-C) and rerun: `embedded in 0.1s`. That difference is your
-cache working — see it in Redis:
+cache working. See it in Redis:
 `docker exec -it workshop-redis redis-cli KEYS 'embedcache-*'`
 (then `HGETALL` one of them).
 
@@ -134,10 +134,10 @@ make verify LAB=1
 
 ## Troubleshooting
 
-- `Error loading ONNX shared library` — install ONNX Runtime
+- `Error loading ONNX shared library`: install ONNX Runtime
   (`brew install onnxruntime` / see `make doctor`), or set
   `ONNXRUNTIME_LIB_PATH` to the library file.
 - Model download slow? It happens once; the Hub cache lives under your user
   cache directory (`redisvl-go/models`).
 
-Next: [Lab 2 — Schema, index, and loading products](lab-2.md)
+Next: [Lab 2: Schema, index, and loading products](lab-2.md)

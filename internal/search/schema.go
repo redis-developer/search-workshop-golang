@@ -51,7 +51,7 @@ func BuildSchema(cfg *config.Config, dims int) (*schema.IndexSchema, error) {
 	//                   Compression: schema.Compression(cfg.Index.SVS.Compression)
 	//
 	// See labs/lab-2.md. The minimal schema below only exists so the
-	// service starts during Lab 1 — replace it entirely.
+	// service starts during Lab 1; replace it entirely.
 	return schema.NewIndexSchema(
 		schema.IndexInfo{
 			Name:     cfg.IndexName(),

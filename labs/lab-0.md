@@ -1,11 +1,11 @@
-# Lab 0 — Setup: Data, Redis, and the Empty Shelf
+# Lab 0: Data, Redis, and the Empty Shelf
 
 **Duration:** ~10 minutes
 
 ## Goal
 
 Get the workshop environment running end to end: Redis up, the WANDS dataset
-prepared, and the service serving its UI — with search still unimplemented.
+prepared, and the service serving its UI, with search still unimplemented.
 Understanding what's *missing* is the map for the rest of the workshop.
 
 ## The scenario
@@ -33,7 +33,7 @@ from “look, results!” into engineering.
    make redis-start
    ```
 
-2. Download and prepare the workshop dataset (deterministic — everyone gets
+2. Download and prepare the workshop dataset (deterministic: everyone gets
    the same 600 products and 24 judged queries):
 
    ```bash
@@ -49,14 +49,14 @@ from “look, results!” into engineering.
    make run
    ```
 
-4. Open <http://localhost:8081>. The UI loads — logo, search box, strategy
+4. Open <http://localhost:8081>. The UI loads: logo, search box, strategy
    dropdown. Now search for anything.
 
 ## What you should see
 
 An error: **`LAB 1: embedding provider not implemented`**. That's the
-workshop in one screenshot: the HTTP layer, the UI, config loading — all
-provided and working — while the search *internals* are yours to build.
+workshop in one screenshot: the HTTP layer, the UI, and config loading are
+all provided and working, while the search *internals* are yours to build.
 This page comes alive one lab at a time.
 
 ## Checkpoint
@@ -72,9 +72,9 @@ Passes when the data is prepared and the service answers.
 ## One query to follow
 
 Pick this query and re-run it in every lab: **`ergonomic chair`**. It's one
-of the sample's 24 *judged* queries — human annotators graded which products
-answer it — so you'll meet it again when the evaluation labs score your
-work. Watching its results change — from error, to semantic matches, to
-filtered, to hybrid — is the workshop's story arc.
+of the sample's 24 *judged* queries (human annotators graded which products
+answer it), so you'll meet it again when the evaluation labs score your
+work. Watching its results change, from error to semantic matches to
+filtered to hybrid, is the workshop's story arc.
 
-Next: [Lab 1 — Local embeddings with a Redis cache](lab-1.md)
+Next: [Lab 1: Local embeddings with a Redis cache](lab-1.md)

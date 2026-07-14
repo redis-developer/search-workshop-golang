@@ -72,7 +72,7 @@ func newProvider(ctx context.Context, cfg *config.Config) (vectorize.Vectorizer,
 	//     })
 	//
 	// See labs/lab-1.md.
-	return nil, fmt.Errorf("LAB 1: embedding provider not implemented — see labs/lab-1.md")
+	return nil, fmt.Errorf("LAB 1: embedding provider not implemented; see labs/lab-1.md")
 }
 
 // Close releases provider resources (the hf provider holds an ONNX

@@ -9,7 +9,7 @@
 
 Welcome to this hands-on workshop where you'll build and evaluate ecommerce
 product search with Go and Redis. You start with a working product-search
-service — the HTTP API skeleton and the web UI are provided complete — and an
+service (the HTTP API skeleton and the web UI are provided complete) and an
 empty Redis database. Lab by lab, you implement the search internals with
 [RedisVL for Golang](https://github.com/redis-developer/redis-vl-golang):
 embeddings, indexing, vector search, filters, hybrid search, and facets. Then
@@ -37,11 +37,11 @@ By the end of this workshop, you'll have a complete Redis-powered search app wit
 - A deterministic, judged WANDS product-search sample (600 products, 24 queries)
 - Local in-process embeddings (ONNX, no API keys) behind a Redis embeddings cache
 - A RedisVL index with text, tag, numeric, and vector fields
-- Vector, filtered vector, hybrid (`FT.HYBRID`), and faceted search — visible
-  live in the UI, switchable per query
+- Vector, filtered vector, hybrid (`FT.HYBRID`), and faceted search, all
+  visible live in the UI and switchable per query
 - A relevance loop: nDCG@10 and Recall@25 against real human judgments
 - A Retrieval Optimizer study across index types (FLAT / HNSW / SVS-VAMANA),
-  embedding models, and query strategies — one ranked table, one recommendation
+  embedding models, and query strategies: one ranked table, one recommendation
 
 ## 📋 Prerequisites
 
@@ -72,7 +72,7 @@ By the end of this workshop, you'll have a complete Redis-powered search app wit
 - ONNX Runtime (`brew install onnxruntime` on macOS; `apt install
   libonnxruntime` or the [official releases](https://onnxruntime.ai/docs/install/) on Linux)
 - [uv](https://docs.astral.sh/uv/) (only for Lab 8)
-- [jq](https://jqlang.org/) (optional — prettifies the checkpoint curls)
+- [jq](https://jqlang.org/) (optional, prettifies the checkpoint curls)
 
 Check your setup at any time:
 
@@ -82,7 +82,7 @@ make doctor
 
 ### Required accounts
 
-No paid account is required. Everything runs locally — embeddings included.
+No paid account is required. Everything runs locally, embeddings included.
 (OpenAI embeddings appear only as an optional tuning comparison for those who
 bring a key.)
 
@@ -90,7 +90,7 @@ bring a key.)
 
 This workshop has an estimated duration of 90–120 minutes, organized into
 progressive labs. Each lab ends with the running service able to do something
-it could not do before — watch the UI come alive as you go.
+it could not do before. Watch the UI come alive as you go.
 
 | Lab | Topic | Duration |
 | --- | ----- | -------- |
@@ -109,10 +109,10 @@ Lab instructions live in [`labs/`](labs/).
 
 ### Branches
 
-- **`main`** — where you work. Clone it and go: it contains the guided
+- **`main`** is where you work. Clone it and go: it contains the guided
   gaps for all of Labs 1–6, and every lab doc includes the complete code
   to paste, so falling behind just means pasting a little faster.
-- **`workshop-complete`** — the finished service, for reference and for
+- **`workshop-complete`** holds the finished service, for reference and for
   jumping straight to Labs 7–9 (which add configuration and measurement,
   not code).
 
@@ -138,8 +138,8 @@ cmd/searchd      the service: JSON API + web UI on one port
 cmd/eval         nDCG@10 / Recall@25 evaluator (Lab 7's instrument)
 internal/embed   ← Lab 1 lives here
 internal/search  ← Labs 2–6 live here
-internal/httpapi HTTP plumbing (provided — you never edit this)
-web/             the search UI (provided — served via go:embed)
+internal/httpapi HTTP plumbing (provided, you never edit this)
+web/             the search UI (provided, served via go:embed)
 optimizer/       Lab 8's Retrieval Optimizer study (Python, uv)
 config.yaml      every tuning knob in the workshop
 labs/            lab instructions
@@ -163,7 +163,7 @@ changes, please open an issue first to discuss what you would like to change.
 
 ## 👥 Maintainers
 
-- Ricardo Ferreira — [@riferrei](https://github.com/riferrei)
+- Ricardo Ferreira, [@riferrei](https://github.com/riferrei)
 
 ## 📄 License
 

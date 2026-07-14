@@ -1,4 +1,4 @@
-# Lab 2 — Schema, Index, and Loading Products
+# Lab 2: Schema, Index, and Loading Products
 
 **Duration:** ~15 minutes
 
@@ -22,10 +22,10 @@ products into Redis as hashes. After this lab the service starts clean and
   | `embedding` | vector | semantic similarity |
 
 - **`search_text`** was assembled by `cmd/prep` from name + class + category
-  hierarchy + description + features — one field that both BM25 and the
+  hierarchy + description + features: one field that both BM25 and the
   embedding model consume.
 - **Vector algorithms** are declared in the schema (`FLAT` today; `HNSW` and
-  `SVS-VAMANA` are one config edit away — that's Lab 7).
+  `SVS-VAMANA` are one config edit away; that's Lab 7).
 - **Index-first:** we create the index before loading, so Redis indexes
   documents as they arrive.
 
@@ -33,7 +33,7 @@ products into Redis as hashes. After this lab the service starts clean and
 
 Two files, four copy-paste steps.
 
-**Step 1** — in **`internal/search/schema.go`**, replace the `import`
+**Step 1**: in **`internal/search/schema.go`**, replace the `import`
 block with:
 
 ```go
@@ -46,7 +46,7 @@ import (
 )
 ```
 
-**Step 2** — in the same file, replace the entire `BuildSchema` function
+**Step 2**: in the same file, replace the entire `BuildSchema` function
 with:
 
 ```go
@@ -92,7 +92,7 @@ func BuildSchema(cfg *config.Config, dims int) (*schema.IndexSchema, error) {
 }
 ```
 
-**Step 3** — in **`internal/search/service.go`**, replace the `import`
+**Step 3**: in **`internal/search/service.go`**, replace the `import`
 block with:
 
 ```go
@@ -113,7 +113,7 @@ import (
 )
 ```
 
-**Step 4** — in the same file, replace everything in `EnsureIndex` **from
+**Step 4**: in the same file, replace everything in `EnsureIndex` **from
 the `// LAB 2:` comment to the end of the function** with:
 
 ```go
@@ -152,7 +152,7 @@ the `// LAB 2:` comment to the end of the function** with:
 ```
 
 Note the naming scheme: keys are `wands-{run}-{model}:{product_id}` and the
-index is `wands-{run}-{model}-{algorithm}` — so indexes with different
+index is `wands-{run}-{model}-{algorithm}`, so indexes with different
 algorithms *share* keys for the same model. Lab 8 exploits this.
 
 ## Checkpoint
@@ -163,7 +163,7 @@ curl -s localhost:8081/stats
 ```
 
 `/stats` should report `num_docs: 600` for `wands-local-all-minilm-l6-v2-flat`.
-Fetch a single product — grab any `product_id` from the first line of
+Fetch a single product: grab any `product_id` from the first line of
 `data/corpus.jsonl`, then:
 
 ```bash
@@ -177,7 +177,7 @@ redis-cli HGETALL wands-local-all-minilm-l6-v2:<that id>`.
 make verify LAB=2
 ```
 
-Searching in the UI still fails — the strategies are Labs 3–5. But the shelf
+Searching in the UI still fails; the strategies are Labs 3–5. But the shelf
 is stocked.
 
-Next: [Lab 3 — Vector search](lab-3.md)
+Next: [Lab 3: Vector search](lab-3.md)

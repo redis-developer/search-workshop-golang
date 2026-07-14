@@ -42,7 +42,7 @@ type Item struct {
 	Score float64 `json:"score"`
 }
 
-// Meta describes which configuration answered a search — the workshop's
+// Meta describes which configuration answered a search: the workshop's
 // observability surface.
 type Meta struct {
 	Strategy       string  `json:"strategy"`
@@ -146,15 +146,15 @@ func (s *Service) searchText(ctx context.Context, text string, f *filter.Express
 // (Lab 3; Lab 4 adds the filter).
 func (s *Service) searchVector(ctx context.Context, text string, f *filter.Expression, k int) ([]map[string]any, error) {
 	// LAB 3: semantic KNN search:
-	//   1. embed the query text with s.vec.Embed(ctx, text) — the same
+	//   1. embed the query text with s.vec.Embed(ctx, text): the same
 	//      cached vectorizer that embedded the products
 	//   2. query.NewVectorQuery(FieldEmbedding, vec).
 	//        NumResults(k).ReturnFields(returnFields...)
 	//   3. execute with s.index.Query(ctx, q)
-	// (Ignore f for now — filters arrive in Lab 4.)
+	// (Ignore f for now; filters arrive in Lab 4.)
 	// See labs/lab-3.md.
 	_ = f
-	return nil, fmt.Errorf("LAB 3: vector search not implemented — see labs/lab-3.md")
+	return nil, fmt.Errorf("LAB 3: vector search not implemented; see labs/lab-3.md")
 }
 
 // searchHybrid fuses a lexical leg and a semantic leg server-side with
@@ -167,9 +167,9 @@ func (s *Service) searchHybrid(ctx context.Context, text string, f *filter.Expre
 	//   3. attach the filter when non-nil (hybrid + filters compose)
 	//   4. apply the configured fusion from s.cfg.Search.Hybrid:
 	//        CombineLinear(alpha) or CombineRRF(window, constant)
-	//   5. execute with s.index.Hybrid(ctx, q) — not Query!
+	//   5. execute with s.index.Hybrid(ctx, q), not Query!
 	// See labs/lab-5.md.
-	return nil, fmt.Errorf("LAB 5: hybrid search not implemented — see labs/lab-5.md")
+	return nil, fmt.Errorf("LAB 5: hybrid search not implemented; see labs/lab-5.md")
 }
 
 // buildFilter combines the request's catalog constraints into one filter
@@ -220,7 +220,7 @@ func (s *Service) Facets(ctx context.Context, limit int) ([]Facet, error) {
 	// LAB 6: execute the aggregation with
 	// s.index.Aggregate(ctx, facetQuery{limit: limit}) and map each row
 	// (keys: product_class, count, avg_rating) to a Facet.
-	return nil, fmt.Errorf("LAB 6: facets not implemented — see labs/lab-6.md")
+	return nil, fmt.Errorf("LAB 6: facets not implemented; see labs/lab-6.md")
 }
 
 // itemFromRow maps a raw result row to a UI item. FT.SEARCH-based
@@ -253,7 +253,7 @@ func itemFromRow(row map[string]any, prefix string) Item {
 }
 
 // ProductIDs extracts the bare product IDs from a response, in rank
-// order — used by cmd/eval to score runs against the qrels.
+// order, used by cmd/eval to score runs against the qrels.
 func (r *Response) ProductIDs() []string {
 	ids := make([]string, len(r.Items))
 	for i, item := range r.Items {

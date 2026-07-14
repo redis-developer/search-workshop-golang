@@ -67,7 +67,7 @@ func run(refresh, full bool) error {
 	qrelsPath := filepath.Join(dataDir, "qrels.txt")
 
 	if !refresh && exists(corpusPath) && exists(queriesPath) && exists(qrelsPath) {
-		fmt.Println("data/ already prepared — reusing it (pass -refresh to rebuild)")
+		fmt.Println("data/ already prepared: reusing it (pass -refresh to rebuild)")
 		return summarize(corpusPath, queriesPath, qrelsPath)
 	}
 
