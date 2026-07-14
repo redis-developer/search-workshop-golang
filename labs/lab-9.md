@@ -56,7 +56,7 @@ Yours may differ, and that's the point. Read it off *your* table.
 
 ## Where to go next
 
-- [RedisVL for Golang documentation](https://redis-developer.github.io/redis-vl-golang/redisvl/current/)
+- [RedisVL for Golang documentation](https://redis.github.io/redis-vl-golang/redisvl/current/)
 - [Redis Retrieval Optimizer](https://github.com/redis-applied-ai/redis-retrieval-optimizer)
   for grid and Bayesian studies, beyond the search study used here
 - [WANDS](https://github.com/wayfair/WANDS): the dataset's paper and full
