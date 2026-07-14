@@ -1,0 +1,60 @@
+# Lab 3 — Vector Search
+
+**Duration:** ~10 minutes · **Branch:** `lab-3-starter` · **Solution:** `lab-3-solution`
+
+## Goal
+
+The first results in the browser: semantic product search. Embed the user's
+query with the *same model* that embedded the products, then ask Redis for the
+nearest neighbors.
+
+## Concepts
+
+- **KNN vector search:** the query becomes a vector; Redis returns the `k`
+  products whose embeddings are closest (cosine distance). No keyword needs
+  to match — “couch” finds sofas.
+- **Query-side caching:** the query is embedded through the same
+  `CachedVectorizer` from Lab 1. The UI searches as you type (debounced), so
+  repeated queries hit the cache — watch the timing drop in the footer.
+- **`vector_distance`:** each result carries its distance; lower is closer.
+  It surfaces as `score` in the JSON response.
+
+## Your task
+
+**`searchVector`** in `internal/search/queries.go`:
+
+1. Embed the query text: `s.vec.Embed(ctx, text)`.
+2. Build the query:
+
+   ```go
+   q := query.NewVectorQuery(FieldEmbedding, vec).
+       NumResults(k).
+       ReturnFields(returnFields...)
+   ```
+
+3. Execute with `s.index.Query(ctx, q)` and return the rows. (Ignore the
+   filter argument for now — that's Lab 4.)
+
+## Checkpoint
+
+Restart `make run`, open <http://localhost:8081>, and search **`outdoor sofa`**.
+
+Products appear — and look at *what* appears: patio sofas and outdoor
+sectionals, even where descriptions never contain your exact words. The
+footer reads something like:
+
+```
+vector · flat · all-minilm-l6-v2 → 14 ms
+```
+
+Try queries that showcase semantics: `comfy couch for a small living room`,
+`something to keep drinks cold outside`. Then try `all-clad 7 qt slow cooker`
+— exact model names are where pure vector search starts to look shaky.
+Remember that observation for Lab 5.
+
+```bash
+make verify LAB=3
+curl -s 'localhost:8081/search?query=outdoor+sofa' | jq '.meta, .matchedProducts[0]'
+```
+
+Next: [Lab 4 — Filtered vector search](lab-4.md)
