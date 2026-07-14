@@ -8,7 +8,7 @@ import (
 
 	"github.com/redis/go-redis/v9"
 
-	redisvl "github.com/redis-developer/redis-vl-golang"
+	redisvl "github.com/redis/redis-vl-golang"
 
 	"github.com/redis-developer/search-workshop-golang/internal/catalog"
 	"github.com/redis-developer/search-workshop-golang/internal/config"
@@ -119,7 +119,7 @@ func (s *Service) EnsureIndex(ctx context.Context, force bool) error {
 	//   1. for each product, build a map[string]any with the Field*
 	//      constants as keys, plus "product_id"; serialize the vector
 	//      with vectors.ToBuffer(embeddings[i], vectors.Float32)
-	//      (import "github.com/redis-developer/redis-vl-golang/vectors")
+	//      (import "github.com/redis/redis-vl-golang/vectors")
 	//   2. s.index.Create(ctx, redisvl.CreateOptions{Overwrite: true})
 	//   3. s.index.Load(ctx, records, redisvl.LoadOptions{
 	//        IDField: "product_id", BatchSize: 200})

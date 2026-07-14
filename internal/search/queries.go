@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/redis-developer/redis-vl-golang/filter"
-	"github.com/redis-developer/redis-vl-golang/query"
+	"github.com/redis/redis-vl-golang/filter"
+	"github.com/redis/redis-vl-golang/query"
 
 	"github.com/redis-developer/search-workshop-golang/internal/config"
 )

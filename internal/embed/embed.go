@@ -12,7 +12,7 @@ import (
 
 	"github.com/redis/go-redis/v9"
 
-	"github.com/redis-developer/redis-vl-golang/extensions/vectorize"
+	"github.com/redis/redis-vl-golang/extensions/vectorize"
 
 	"github.com/redis-developer/search-workshop-golang/internal/config"
 )
@@ -40,7 +40,7 @@ func New(ctx context.Context, cfg *config.Config, client redis.UniversalClient) 
 	//       Name: cfg.CacheName(),
 	//   })
 	//   cached := cache.NewCachedVectorizer(inner, embCache)
-	// (import "github.com/redis-developer/redis-vl-golang/extensions/cache")
+	// (import "github.com/redis/redis-vl-golang/extensions/cache")
 	// then put cached (not inner) into the Vectorizer below.
 	// See labs/lab-1.md.
 	_ = client
@@ -63,7 +63,7 @@ func newProvider(ctx context.Context, cfg *config.Config) (vectorize.Vectorizer,
 	//         BatchSize:       cfg.Embedding.BatchSize,
 	//         ONNXRuntimePath: onnxRuntimePath(),
 	//     })
-	//     (import hf "github.com/redis-developer/redis-vl-golang/extensions/vectorize/hf")
+	//     (import hf "github.com/redis/redis-vl-golang/extensions/vectorize/hf")
 	//
 	//   config.ProviderOpenAI -> hosted embeddings (needs OPENAI_API_KEY):
 	//     vectorize.NewOpenAIVectorizer(ctx, vectorize.OpenAIConfig{
