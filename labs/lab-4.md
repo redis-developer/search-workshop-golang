@@ -1,6 +1,6 @@
 # Lab 4 — Filtered Vector Search
 
-**Duration:** ~10 minutes · **Catch-up branch:** `lab-4-starter` · **Solution:** `lab-4-solution`
+**Duration:** ~10 minutes
 
 ## Goal
 

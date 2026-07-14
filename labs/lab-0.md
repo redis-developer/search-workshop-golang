@@ -1,6 +1,6 @@
 # Lab 0 — Setup: Data, Redis, and the Empty Shelf
 
-**Duration:** ~10 minutes · **Branch:** `lab-1-starter`
+**Duration:** ~10 minutes
 
 ## Goal
 

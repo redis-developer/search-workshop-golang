@@ -1,6 +1,6 @@
 # Lab 2 — Schema, Index, and Loading Products
 
-**Duration:** ~15 minutes · **Catch-up branch:** `lab-2-starter` · **Solution:** `lab-2-solution`
+**Duration:** ~15 minutes
 
 ## Goal
 

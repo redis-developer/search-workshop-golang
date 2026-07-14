@@ -1,6 +1,6 @@
 # Lab 3 — Vector Search
 
-**Duration:** ~10 minutes · **Catch-up branch:** `lab-3-starter` · **Solution:** `lab-3-solution`
+**Duration:** ~10 minutes
 
 ## Goal
 

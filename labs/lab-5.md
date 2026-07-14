@@ -1,6 +1,6 @@
 # Lab 5 — Hybrid Search with FT.HYBRID
 
-**Duration:** ~15 minutes · **Catch-up branch:** `lab-5-starter` · **Solution:** `lab-5-solution`
+**Duration:** ~15 minutes
 
 ## Goal
 

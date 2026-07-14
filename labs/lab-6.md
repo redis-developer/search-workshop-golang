@@ -1,6 +1,6 @@
 # Lab 6 — Faceting with Aggregations
 
-**Duration:** ~10 minutes · **Catch-up branch:** `lab-6-starter` · **Solution:** `lab-6-solution`
+**Duration:** ~10 minutes
 
 ## Goal
 

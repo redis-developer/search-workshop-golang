@@ -1,6 +1,6 @@
 # Lab 7 — Tuning Knobs: Experiment, Observe, Measure
 
-**Duration:** ~15 minutes · **Continue on your branch** (catch-up: `lab-7`) · **No new code**
+**Duration:** ~15 minutes · **No new code** (behind? `git checkout workshop-complete` gives you the finished app)
 
 ## Goal
 

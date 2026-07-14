@@ -105,24 +105,16 @@ it could not do before — watch the UI come alive as you go.
 | 8 | The optimizer study: pick a winner | 15 min |
 | 9 | Wrap-up and next experiments | 5 min |
 
-Lab instructions live in [`labs/`](labs/) (present on every branch).
+Lab instructions live in [`labs/`](labs/).
 
-### One branch to work on, the rest are safety nets
+### Two branches, no juggling
 
-Check out **`lab-1-starter`** once and stay on it: it contains the guided
-gaps for *all* of Labs 1–6, and you fill them in one lab at a time —
-no branch switching during the workshop. The other branches exist for
-recovery and comparison:
-
-- **`lab-N-solution`** — the reference implementation through Lab N.
-  Ask "what am I missing?" with `git diff lab-3-solution -- internal/`,
-  or check it out if you're stuck.
-- **`lab-N-starter`** (N ≥ 2) — clean re-entry points: joining late or
-  starting over? `git checkout lab-4-starter` gives you Labs 1–3 already
-  solved.
-- **`workshop-complete`** (also `lab-7`, `lab-8`) — the finished service,
-  used for Labs 7–9, which add configuration and measurement rather than
-  code.
+- **`main`** — where you work. Clone it and go: it contains the guided
+  gaps for all of Labs 1–6, and every lab doc includes the complete code
+  to paste, so falling behind just means pasting a little faster.
+- **`workshop-complete`** — the finished service, for reference and for
+  jumping straight to Labs 7–9 (which add configuration and measurement,
+  not code).
 
 ## 🚀 Getting Started
 
@@ -136,11 +128,8 @@ recovery and comparison:
    make redis-start
    ```
 
-3. Start with [Lab 0](labs/lab-0.md):
-
-   ```bash
-   git checkout lab-1-starter
-   ```
+3. Start with [Lab 0](labs/lab-0.md) — no branch switching needed; `main`
+   is your working branch for the whole workshop.
 
 ## 🧭 How the Repository Is Laid Out
 

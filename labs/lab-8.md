@@ -1,6 +1,6 @@
 # Lab 8 — The Optimizer Study: Pick a Winner
 
-**Duration:** ~15 minutes · **Continue on your branch** (catch-up: `lab-8`) · **No new Go code**
+**Duration:** ~15 minutes · **No new Go code** (behind? `git checkout workshop-complete` gives you the finished app)
 
 ## Goal
 

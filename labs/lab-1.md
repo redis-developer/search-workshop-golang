@@ -1,6 +1,6 @@
 # Lab 1 — Local Embeddings with a Redis Cache
 
-**Duration:** ~15 minutes · **Your branch:** `lab-1-starter` (stay here all workshop) · **Solution:** `lab-1-solution`
+**Duration:** ~15 minutes
 
 ## Goal
 
