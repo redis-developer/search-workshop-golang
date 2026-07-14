@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Go 1.25+](https://img.shields.io/badge/Go-1.25%2B-blue.svg)](https://go.dev/dl/)
 [![Redis Query Engine](https://img.shields.io/badge/Redis-Query%20Engine-DC382D.svg)](https://redis.io/docs/latest/develop/interact/search-and-query/)
-[![RedisVL for Golang](https://img.shields.io/badge/RedisVL-Golang-DC382D.svg)](https://github.com/redis-developer/redis-vl-golang)
+[![RedisVL for Golang](https://img.shields.io/badge/RedisVL-Golang-DC382D.svg)](https://github.com/redis/redis-vl-golang)
 
 ## 🌟 Overview
 
@@ -11,7 +11,7 @@ Welcome to this hands-on workshop where you'll build and evaluate ecommerce
 product search with Go and Redis. You start with a working product-search
 service (the HTTP API skeleton and the web UI are provided complete) and an
 empty Redis database. Lab by lab, you implement the search internals with
-[RedisVL for Golang](https://github.com/redis-developer/redis-vl-golang):
+[RedisVL for Golang](https://github.com/redis/redis-vl-golang):
 embeddings, indexing, vector search, filters, hybrid search, and facets. Then
 you stop guessing and start measuring: using the
 [WANDS](https://github.com/wayfair/WANDS) relevance judgments and the
@@ -150,8 +150,8 @@ JSON, config, and frontend are all provided.
 
 ## 📚 Resources
 
-- [RedisVL for Golang](https://github.com/redis-developer/redis-vl-golang) ·
-  [documentation](https://redis-developer.github.io/redis-vl-golang/redisvl/current/)
+- [RedisVL for Golang](https://github.com/redis/redis-vl-golang) ·
+  [documentation](https://redis.github.io/redis-vl-golang/redisvl/current/)
 - [Redis Search](https://redis.io/docs/latest/develop/interact/search-and-query/)
 - [WANDS dataset](https://github.com/wayfair/WANDS)
 - [Redis Retrieval Optimizer](https://github.com/redis-applied-ai/redis-retrieval-optimizer)
