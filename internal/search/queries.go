@@ -219,15 +219,18 @@ type facetQuery struct{ limit int }
 
 // AggregateArgs implements query.AggregationQuery.
 func (q facetQuery) AggregateArgs(indexName string) []any {
-	return []any{
-		"FT.AGGREGATE", indexName, "*",
-		"GROUPBY", 1, "@" + FieldClass,
-		"REDUCE", "COUNT", 0, "AS", "count",
-		"REDUCE", "AVG", 1, "@" + FieldAverageRating, "AS", "avg_rating",
-		"SORTBY", 2, "@count", "DESC",
-		"LIMIT", 0, q.limit,
-		"DIALECT", 2,
-	}
+	// LAB 6: return the FT.AGGREGATE argument slice:
+	//
+	//   FT.AGGREGATE <indexName> *
+	//     GROUPBY 1 @product_class
+	//     REDUCE COUNT 0 AS count
+	//     REDUCE AVG 1 @average_rating AS avg_rating
+	//     SORTBY 2 @count DESC
+	//     LIMIT 0 <q.limit>
+	//     DIALECT 2
+	//
+	// See labs/lab-6.md.
+	return nil
 }
 
 // Facets aggregates the catalog by product class.
@@ -235,19 +238,10 @@ func (s *Service) Facets(ctx context.Context, limit int) ([]Facet, error) {
 	if limit <= 0 {
 		limit = 25
 	}
-	rows, err := s.index.Aggregate(ctx, facetQuery{limit: limit})
-	if err != nil {
-		return nil, fmt.Errorf("aggregating facets: %w", err)
-	}
-	facets := make([]Facet, 0, len(rows))
-	for _, row := range rows {
-		facets = append(facets, Facet{
-			Class:     asString(row[FieldClass]),
-			Count:     int64(asFloat(row["count"])),
-			AvgRating: asFloat(row["avg_rating"]),
-		})
-	}
-	return facets, nil
+	// LAB 6: execute the aggregation with
+	// s.index.Aggregate(ctx, facetQuery{limit: limit}) and map each row
+	// (keys: product_class, count, avg_rating) to a Facet.
+	return nil, fmt.Errorf("LAB 6: facets not implemented — see labs/lab-6.md")
 }
 
 // itemFromRow maps a raw result row to a UI item. FT.SEARCH-based
