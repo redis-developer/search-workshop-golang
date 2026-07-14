@@ -1,0 +1,23 @@
+{
+  "name": "search-workshop-golang",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "forwardPorts": [8081, 6379],
+  "portsAttributes": {
+    "8081": { "label": "Search UI + API" },
+    "6379": { "label": "Redis" }
+  },
+  "postCreateCommand": "make deps",
+  "customizations": {
+    "vscode": {
+      "extensions": ["golang.go", "redis.redis-for-vscode"]
+    }
+  },
+  "remoteEnv": {
+    "ONNXRUNTIME_LIB_PATH": "/usr/local/lib/libonnxruntime.so"
+  }
+}

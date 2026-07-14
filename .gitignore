@@ -28,5 +28,18 @@ go.work.sum
 .env
 
 # Editor/IDE
-# .idea/
-# .vscode/
+.idea/
+.vscode/
+
+# Workshop-generated data (WANDS downloads and processed sample)
+data/
+
+# Python (Lab 8 optimizer project)
+optimizer/.venv/
+__pycache__/
+*.pyc
+
+# Compiled workshop binaries
+/searchd
+/prep
+/eval
