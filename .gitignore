@@ -36,6 +36,7 @@ data/
 
 # Python (Lab 8 optimizer project)
 optimizer/.venv/
+optimizer/.study/
 __pycache__/
 *.pyc
 
