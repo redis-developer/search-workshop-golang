@@ -55,7 +55,7 @@ func buildFilter(req Request) *filter.Expression {
 }
 ```
 
-**Step 2** — in `searchVector`, replace the two lines
+**Step 2** — in `searchVector`, replace this block
 
 ```go
 	// LAB 4: when f is non-nil, pre-filter the KNN candidates with
