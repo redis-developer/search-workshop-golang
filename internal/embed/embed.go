@@ -8,6 +8,7 @@ package embed
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"github.com/redis/go-redis/v9"
 
@@ -58,8 +59,9 @@ func newProvider(ctx context.Context, cfg *config.Config) (vectorize.Vectorizer,
 		// Hugging Face Hub once, cached on disk, and executed through
 		// ONNX Runtime. No API key, no per-call network access.
 		return hf.New(ctx, hf.Config{
-			Model:     cfg.Embedding.Model,
-			BatchSize: cfg.Embedding.BatchSize,
+			Model:           cfg.Embedding.Model,
+			BatchSize:       cfg.Embedding.BatchSize,
+			ONNXRuntimePath: onnxRuntimePath(),
 		})
 	case config.ProviderOpenAI:
 		// Hosted embeddings: requires OPENAI_API_KEY in the environment.
@@ -79,4 +81,30 @@ func (v *Vectorizer) Close() error {
 		return v.closer()
 	}
 	return nil
+}
+
+// onnxRuntimePath locates the ONNX Runtime shared library so workshop
+// participants never have to set environment variables by hand. An
+// explicit ONNXRUNTIME_LIB_PATH always wins; otherwise the standard
+// Homebrew (macOS) and Linux install locations are probed.
+func onnxRuntimePath() string {
+	if v := os.Getenv("ONNXRUNTIME_LIB_PATH"); v != "" {
+		return v
+	}
+	candidates := []string{
+		// macOS: brew install onnxruntime
+		"/opt/homebrew/lib/libonnxruntime.dylib", // Apple Silicon
+		"/usr/local/lib/libonnxruntime.dylib",    // Intel
+		// Linux (incl. the workshop devcontainer)
+		"/usr/local/lib/libonnxruntime.so",
+		"/usr/lib/libonnxruntime.so",
+		"/usr/lib/x86_64-linux-gnu/libonnxruntime.so",
+		"/usr/lib/aarch64-linux-gnu/libonnxruntime.so",
+	}
+	for _, path := range candidates {
+		if _, err := os.Stat(path); err == nil {
+			return path
+		}
+	}
+	return "" // fall back to the hf module's default resolution
 }
