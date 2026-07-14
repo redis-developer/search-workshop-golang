@@ -9,7 +9,6 @@ import (
 	"github.com/redis/go-redis/v9"
 
 	redisvl "github.com/redis-developer/redis-vl-golang"
-	"github.com/redis-developer/redis-vl-golang/vectors"
 
 	"github.com/redis-developer/search-workshop-golang/internal/catalog"
 	"github.com/redis-developer/search-workshop-golang/internal/config"
@@ -116,37 +115,17 @@ func (s *Service) EnsureIndex(ctx context.Context, force bool) error {
 	}
 	fmt.Fprintf(os.Stderr, "embedded in %.1fs\n", time.Since(start).Seconds())
 
-	// LAB 2 (reference solution): convert products to hash records with
-	// the vector as a float32 buffer, load them, and create the index.
-	records := make([]map[string]any, len(products))
-	for i, p := range products {
-		blob, err := vectors.ToBuffer(embeddings[i], vectors.Float32)
-		if err != nil {
-			return fmt.Errorf("serializing embedding for product %s: %w", p.ID, err)
-		}
-		records[i] = map[string]any{
-			"product_id":         p.ID,
-			FieldSearchText:      p.SearchText,
-			FieldName:            p.Name,
-			FieldClass:           p.Class,
-			FieldHierarchy:       p.Hierarchy,
-			FieldDescription:     p.Description,
-			FieldFeatures:        p.Features,
-			FieldAverageRating:   p.AverageRating,
-			FieldRatingCount:     p.RatingCount,
-			FieldReviewCount:     p.ReviewCount,
-			FieldEmbedding:       blob,
-		}
-	}
-
-	if err := s.index.Create(ctx, redisvl.CreateOptions{Overwrite: true}); err != nil {
-		return fmt.Errorf("creating index %s: %w", s.index.Name(), err)
-	}
-	if _, err := s.index.Load(ctx, records, redisvl.LoadOptions{IDField: "product_id", BatchSize: 200}); err != nil {
-		return fmt.Errorf("loading products: %w", err)
-	}
-	fmt.Fprintf(os.Stderr, "index %s ready: %d products\n", s.index.Name(), len(records))
-	return nil
+	// LAB 2: convert products to hash records and index them:
+	//   1. for each product, build a map[string]any with the Field*
+	//      constants as keys, plus "product_id"; serialize the vector
+	//      with vectors.ToBuffer(embeddings[i], vectors.Float32)
+	//      (import "github.com/redis-developer/redis-vl-golang/vectors")
+	//   2. s.index.Create(ctx, redisvl.CreateOptions{Overwrite: true})
+	//   3. s.index.Load(ctx, records, redisvl.LoadOptions{
+	//        IDField: "product_id", BatchSize: 200})
+	// See labs/lab-2.md.
+	_ = embeddings
+	return fmt.Errorf("LAB 2: index creation and loading not implemented — see labs/lab-2.md")
 }
 
 // Product fetches one product record by ID.

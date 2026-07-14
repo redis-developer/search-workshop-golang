@@ -4,8 +4,6 @@
 package search
 
 import (
-	"fmt"
-
 	"github.com/redis-developer/redis-vl-golang/schema"
 
 	"github.com/redis-developer/search-workshop-golang/internal/config"
@@ -36,43 +34,30 @@ const (
 // configured embedding model, so switching models in config.yaml
 // automatically re-dimensions the index.
 func BuildSchema(cfg *config.Config, dims int) (*schema.IndexSchema, error) {
-	attrs := schema.VectorAttrs{
-		Dims:           dims,
-		Datatype:       "float32",
-		DistanceMetric: schema.Cosine,
-	}
-	switch cfg.Index.Algorithm {
-	case "flat":
-		attrs.Algorithm = schema.Flat
-	case "hnsw":
-		attrs.Algorithm = schema.HNSW
-		attrs.M = intPtr(cfg.Index.HNSW.M)
-		attrs.EfConstruction = intPtr(cfg.Index.HNSW.EfConstruction)
-		attrs.EfRuntime = intPtr(cfg.Index.HNSW.EfRuntime)
-	case "svs-vamana":
-		attrs.Algorithm = schema.SVSVamana
-		attrs.Compression = schema.Compression(cfg.Index.SVS.Compression)
-	default:
-		return nil, fmt.Errorf("unknown index algorithm %q", cfg.Index.Algorithm)
-	}
-
-	vectorField, err := schema.NewVectorField(FieldEmbedding, attrs)
-	if err != nil {
-		return nil, fmt.Errorf("defining vector field: %w", err)
-	}
-
+	// LAB 2: build the full product schema. Field types:
+	//
+	//   search_text, product_name                          -> schema.NewTextField
+	//   product_class                                      -> schema.NewTagField
+	//   average_rating, rating_count, review_count         -> schema.NewNumericField
+	//   embedding                                          -> schema.NewVectorField with
+	//     schema.VectorAttrs{Dims: dims, Datatype: "float32",
+	//                        DistanceMetric: schema.Cosine, Algorithm: ...}
+	//
+	// The algorithm comes from cfg.Index.Algorithm:
+	//   "flat"       -> schema.Flat
+	//   "hnsw"       -> schema.HNSW, plus M/EfConstruction/EfRuntime from
+	//                   cfg.Index.HNSW (use intPtr(...) for the *int attrs)
+	//   "svs-vamana" -> schema.SVSVamana, plus
+	//                   Compression: schema.Compression(cfg.Index.SVS.Compression)
+	//
+	// See labs/lab-2.md. The minimal schema below only exists so the
+	// service starts during Lab 1 — replace it entirely.
 	return schema.NewIndexSchema(
 		schema.IndexInfo{
 			Name:     cfg.IndexName(),
 			Prefixes: []string{cfg.KeyPrefix()},
 		},
 		schema.NewTextField(FieldSearchText),
-		schema.NewTextField(FieldName),
-		schema.NewTagField(FieldClass),
-		schema.NewNumericField(FieldAverageRating),
-		schema.NewNumericField(FieldRatingCount),
-		schema.NewNumericField(FieldReviewCount),
-		vectorField,
 	)
 }
 
