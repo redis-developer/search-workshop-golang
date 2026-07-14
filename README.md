@@ -91,25 +91,37 @@ This workshop has an estimated duration of 90–120 minutes, organized into
 progressive labs. Each lab ends with the running service able to do something
 it could not do before — watch the UI come alive as you go.
 
-| Lab | Topic | Duration | Branch |
-| --- | ----- | -------- | ------ |
-| 0 | Setup: data, Redis, and the empty shelf | 10 min | `lab-1-starter` |
-| 1 | Local embeddings with a Redis cache | 15 min | `lab-1-starter` |
-| 2 | Schema, index, and loading products | 15 min | `lab-2-starter` |
-| 3 | Vector search | 10 min | `lab-3-starter` |
-| 4 | Filtered vector search | 10 min | `lab-4-starter` |
-| 5 | Hybrid search with `FT.HYBRID` | 15 min | `lab-5-starter` |
-| 6 | Faceting with aggregations | 10 min | `lab-6-starter` |
-| 7 | Tuning knobs: experiment, observe, measure | 15 min | `lab-7` |
-| 8 | The optimizer study: pick a winner | 15 min | `lab-8` |
-| 9 | Wrap-up and next experiments | 5 min | `lab-8` |
+| Lab | Topic | Duration |
+| --- | ----- | -------- |
+| 0 | Setup: data, Redis, and the empty shelf | 10 min |
+| 1 | Local embeddings with a Redis cache | 15 min |
+| 2 | Schema, index, and loading products | 15 min |
+| 3 | Vector search | 10 min |
+| 4 | Filtered vector search | 10 min |
+| 5 | Hybrid search with `FT.HYBRID` | 15 min |
+| 6 | Faceting with aggregations | 10 min |
+| 7 | Tuning knobs: experiment, observe, measure | 15 min |
+| 8 | The optimizer study: pick a winner | 15 min |
+| 9 | Wrap-up and next experiments | 5 min |
 
-Labs 1–6 have `lab-N-starter` and `lab-N-solution` branches. Compare your work
-with `git diff lab-N-solution`, or check the solution branch out if you fall
-behind. Labs 7–9 add no new code — they exercise everything you built. The
-`workshop-complete` branch holds the final state.
+Lab instructions live in [`labs/`](labs/) (present on every branch).
 
-Lab instructions live in [`labs/`](labs/).
+### One branch to work on, the rest are safety nets
+
+Check out **`lab-1-starter`** once and stay on it: it contains the guided
+gaps for *all* of Labs 1–6, and you fill them in one lab at a time —
+no branch switching during the workshop. The other branches exist for
+recovery and comparison:
+
+- **`lab-N-solution`** — the reference implementation through Lab N.
+  Ask "what am I missing?" with `git diff lab-3-solution -- internal/`,
+  or check it out if you're stuck.
+- **`lab-N-starter`** (N ≥ 2) — clean re-entry points: joining late or
+  starting over? `git checkout lab-4-starter` gives you Labs 1–3 already
+  solved.
+- **`workshop-complete`** (also `lab-7`, `lab-8`) — the finished service,
+  used for Labs 7–9, which add configuration and measurement rather than
+  code.
 
 ## 🚀 Getting Started
 
