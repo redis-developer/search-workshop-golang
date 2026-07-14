@@ -12,9 +12,9 @@ import (
 
 	"github.com/redis/go-redis/v9"
 
-	"github.com/redis-developer/redis-vl-golang/extensions/cache"
-	"github.com/redis-developer/redis-vl-golang/extensions/vectorize"
-	hf "github.com/redis-developer/redis-vl-golang/extensions/vectorize/hf"
+	"github.com/redis/redis-vl-golang/extensions/cache"
+	"github.com/redis/redis-vl-golang/extensions/vectorize"
+	hf "github.com/redis/redis-vl-golang/extensions/vectorize/hf"
 
 	"github.com/redis-developer/search-workshop-golang/internal/config"
 )

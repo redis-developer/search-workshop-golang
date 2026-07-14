@@ -83,12 +83,12 @@ github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZb
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 h1:o4JXh1EVt9k/+g42oCprj/FisM4qX9L3sZB3upGN2ZU=
 github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55/go.mod h1:OmDBASR4679mdNQnz2pUhc2G8CO2JrUAVFDRBDP/hJE=
-github.com/redis-developer/redis-vl-golang v0.1.2 h1:EhH08KFsYBuRUIzm8okQ+haRMTQkAEWomIDa5XVWax4=
-github.com/redis-developer/redis-vl-golang v0.1.2/go.mod h1:V/SzNVCJsw8PBIRiTZpKV5jVqRr7BSwp9oOmyWu2rys=
-github.com/redis-developer/redis-vl-golang/extensions/vectorize/hf v0.1.2 h1:pwKgdQeNvsSdwqH7/lMD3KkaWfwQRSqYSs+Tpdxaui8=
-github.com/redis-developer/redis-vl-golang/extensions/vectorize/hf v0.1.2/go.mod h1:kfrlTRzRUUou8ISxaawHcijzLXnXnQfaCd7kTaJta7Y=
 github.com/redis/go-redis/v9 v9.21.0 h1:FPBE4hhbAke+TLmcY3WkpbDffJEomdqPn3HYiqAtL9E=
 github.com/redis/go-redis/v9 v9.21.0/go.mod h1:v/M13XI1PVCDcm01VtPFOADfZtHf8YW3baQf57KlIkA=
+github.com/redis/redis-vl-golang v0.2.0 h1:me46l6tjBq19U2RAiWpYIjjQonieQ4Cs/JnIws2HHLQ=
+github.com/redis/redis-vl-golang v0.2.0/go.mod h1:lB4YjIXIu4E4Ah1jqWZrHqAKmR++C+t4J58+zfEHUCU=
+github.com/redis/redis-vl-golang/extensions/vectorize/hf v0.2.0 h1:00vyo58tisSgU2ZEyvPF9c6yDSj8N9N4kO4Vf1pFyaE=
+github.com/redis/redis-vl-golang/extensions/vectorize/hf v0.2.0/go.mod h1:3K3ZR36EswLx/IXUl8me8TJJUGXnzsQTHFTyhagn5lc=
 github.com/rivo/uniseg v0.4.7 h1:WUdvkW8uEhrYfLC4ZzdpI2ztxP1I582+49Oc5Mq64VQ=
 github.com/rivo/uniseg v0.4.7/go.mod h1:FN3SvrM+Zdj16jyLfmOkMNblXMcoc8DfTHruCPUcx88=
 github.com/schollz/progressbar/v2 v2.15.0 h1:dVzHQ8fHRmtPjD3K10jT3Qgn/+H+92jhPrhmxIJfDz8=

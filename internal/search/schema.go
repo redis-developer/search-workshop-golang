@@ -6,7 +6,7 @@ package search
 import (
 	"fmt"
 
-	"github.com/redis-developer/redis-vl-golang/schema"
+	"github.com/redis/redis-vl-golang/schema"
 
 	"github.com/redis-developer/search-workshop-golang/internal/config"
 )

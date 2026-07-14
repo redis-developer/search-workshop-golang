@@ -40,7 +40,7 @@ block with:
 import (
 	"fmt"
 
-	"github.com/redis-developer/redis-vl-golang/schema"
+	"github.com/redis/redis-vl-golang/schema"
 
 	"github.com/redis-developer/search-workshop-golang/internal/config"
 )
@@ -104,8 +104,8 @@ import (
 
 	"github.com/redis/go-redis/v9"
 
-	redisvl "github.com/redis-developer/redis-vl-golang"
-	"github.com/redis-developer/redis-vl-golang/vectors"
+	redisvl "github.com/redis/redis-vl-golang"
+	"github.com/redis/redis-vl-golang/vectors"
 
 	"github.com/redis-developer/search-workshop-golang/internal/catalog"
 	"github.com/redis-developer/search-workshop-golang/internal/config"
