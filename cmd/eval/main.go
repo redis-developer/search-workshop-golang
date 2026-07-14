@@ -1,14 +1,14 @@
 // Command eval scores the current configuration against the WANDS
-// relevance judgments — the instrument for Lab 7's tuning experiments.
+// relevance judgments: the instrument for Lab 7's tuning experiments.
 //
 // It runs every judged query through the same search code the API uses,
 // then reports three numbers per configuration:
 //
-//   - nDCG@10  — graded first-page relevance (the headline metric)
-//   - Recall@25 — coverage guardrail: of the known-relevant products,
+//   - nDCG@10: graded first-page relevance (the headline metric)
+//   - Recall@25: coverage guardrail: of the known-relevant products,
 //     how many made the top 25? WANDS queries often have MANY relevant
 //     products, so read this as a floor, not a grade.
-//   - avg query ms — measured client-side, per query
+//   - avg query ms: measured client-side, per query
 //
 // Usage:
 //
@@ -131,7 +131,7 @@ func gradeMap(judgments []catalog.Judgment) map[string]map[string]int {
 }
 
 // ndcg computes normalized discounted cumulative gain at depth k with the
-// standard log2 rank discount. Unjudged products count as grade 0 — the
+// standard log2 rank discount. Unjudged products count as grade 0, the
 // conventional (conservative) assumption.
 func ndcg(ranked []string, grades map[string]int, k int) float64 {
 	if len(ranked) > k {

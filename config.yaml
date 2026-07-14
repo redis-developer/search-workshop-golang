@@ -1,4 +1,4 @@
-# Workshop configuration — the single tuning surface.
+# Workshop configuration: the single tuning surface.
 #
 # Every knob the workshop asks you to experiment with lives in this file.
 # After changing embedding or index settings, run `make reindex` and re-run
@@ -14,21 +14,21 @@ redis:
   run_id: local
 
 embedding:
-  # hf     — local in-process ONNX embeddings (no API key, offline-capable)
-  # openai — OpenAI embeddings API (requires OPENAI_API_KEY)
+  # hf     = local in-process ONNX embeddings (no API key, offline-capable)
+  # openai = OpenAI embeddings API (requires OPENAI_API_KEY)
   provider: hf
   # hf options:
-  #   sentence-transformers/all-MiniLM-L6-v2   (384 dims — small, fast)
-  #   sentence-transformers/all-mpnet-base-v2  (768 dims — larger, better)
+  #   sentence-transformers/all-MiniLM-L6-v2   (384 dims, small and fast)
+  #   sentence-transformers/all-mpnet-base-v2  (768 dims, larger and better)
   # openai options:
   #   text-embedding-3-small (1536 dims)
   model: sentence-transformers/all-MiniLM-L6-v2
   batch_size: 32
 
 index:
-  # flat        — exact search; the right baseline for a small judged sample
-  # hnsw        — approximate graph search; the usual production candidate
-  # svs-vamana  — graph search with vector compression; memory-lean candidate
+  # flat        = exact search; the right baseline for a small judged sample
+  # hnsw        = approximate graph search; the usual production candidate
+  # svs-vamana  = graph search with vector compression; memory-lean candidate
   algorithm: flat
   hnsw:
     m: 16
@@ -40,12 +40,12 @@ index:
     compression: LVQ8
 
 search:
-  # text | vector | hybrid — the default when the UI/request does not choose.
+  # text | vector | hybrid: the default when the UI/request does not choose.
   default_strategy: vector
   k: 10
   hybrid:
-    # rrf    — reciprocal rank fusion (rank-based, robust default)
-    # linear — weighted score fusion; alpha is the TEXT weight, so
+    # rrf    = reciprocal rank fusion (rank-based, robust default)
+    # linear = weighted score fusion; alpha is the TEXT weight, so
     #          alpha: 0.65 means 65% lexical, 35% semantic.
     fusion: rrf
     alpha: 0.65

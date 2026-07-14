@@ -4,11 +4,11 @@ The Go service (cmd/searchd) built and loaded the index matrix; this
 script measures it. For every (embedding model, index algorithm)
 combination built by `make reindex-matrix`, it runs a set of named
 search methods over the judged WANDS queries and scores them against
-the qrels — producing one ranked table that answers Lab 8's question:
+the qrels, producing one ranked table that answers Lab 8's question:
 which configuration should go to production?
 
 The study never rebuilds indexes or re-embeds the corpus: it connects
-to the indexes the Go app already built (a deliberate polyglot moment —
+to the indexes the Go app already built (a deliberate polyglot moment:
 build in Go, measure with the best available evaluation tool).
 
 Usage:
@@ -16,7 +16,7 @@ Usage:
 
 Environment:
     REDIS_URL          (default redis://localhost:6379)
-    WORKSHOP_RUN_ID    (default local — must match the Go config)
+    WORKSHOP_RUN_ID    (default local, must match the Go config)
 """
 
 from __future__ import annotations
@@ -29,7 +29,7 @@ from pathlib import Path
 
 # Keep the study output readable in class: ranx ships LaTeX templates that
 # trip SyntaxWarning on import, and redisvl marks its FT.HYBRID query
-# classes experimental (we accept that — the Go side uses FT.HYBRID too).
+# classes experimental (we accept that: the Go side uses FT.HYBRID too).
 warnings.filterwarnings("ignore", category=SyntaxWarning)
 warnings.filterwarnings("ignore", message=".*experimental.*")
 
@@ -161,7 +161,7 @@ def make_hybrid_method(combination_method: str = "LINEAR", text_weight: float = 
                     if inputs.id_field_name in rec:
                         scores[rec[inputs.id_field_name]] = float(rec["hybrid_score"])
                 results[key] = scores or {"no_match": 0}
-            except Exception as e:  # noqa: BLE001 — a failed query scores zero
+            except Exception as e:  # noqa: BLE001; a failed query scores zero
                 logging.warning("hybrid query failed for %s: %s", key, e)
                 results[key] = {"no_match": 0}
         return SearchMethodOutput(run=Run(results), query_metrics=inputs.query_metrics)
@@ -207,7 +207,7 @@ def index_exists(client: Redis, name: str) -> bool:
     try:
         client.ft(name).info()
         return True
-    except Exception:  # noqa: BLE001 — "Unknown index name" or connection error
+    except Exception:  # noqa: BLE001; "Unknown index name" or connection error
         return False
 
 
@@ -221,7 +221,7 @@ def main() -> None:
         for algorithm in spec["algorithms"]:
             index_name = f"wands-{RUN_ID}-{spec['slug']}-{algorithm}"
             if not index_exists(client, index_name):
-                print(f"skipping {index_name} (not built — run `make reindex-matrix`)")
+                print(f"skipping {index_name} (not built; run `make reindex-matrix`)")
                 continue
 
             print(f"\n=== study: {index_name} ===")
@@ -252,7 +252,7 @@ def main() -> None:
 
     if not frames:
         raise SystemExit(
-            "no indexes found — run `make reindex-matrix` first "
+            "no indexes found; run `make reindex-matrix` first "
             f"(REDIS_URL={REDIS_URL}, WORKSHOP_RUN_ID={RUN_ID})"
         )
 

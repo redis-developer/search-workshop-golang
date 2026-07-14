@@ -42,7 +42,7 @@ type Item struct {
 	Score float64 `json:"score"`
 }
 
-// Meta describes which configuration answered a search — the workshop's
+// Meta describes which configuration answered a search: the workshop's
 // observability surface.
 type Meta struct {
 	Strategy       string  `json:"strategy"`
@@ -280,7 +280,7 @@ func itemFromRow(row map[string]any, prefix string) Item {
 }
 
 // ProductIDs extracts the bare product IDs from a response, in rank
-// order — used by cmd/eval to score runs against the qrels.
+// order, used by cmd/eval to score runs against the qrels.
 func (r *Response) ProductIDs() []string {
 	ids := make([]string, len(r.Items))
 	for i, item := range r.Items {

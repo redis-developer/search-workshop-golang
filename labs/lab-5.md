@@ -1,4 +1,4 @@
-# Lab 5 — Hybrid Search with FT.HYBRID
+# Lab 5: Hybrid Search with FT.HYBRID
 
 **Duration:** ~15 minutes
 
@@ -18,11 +18,11 @@ all three strategies switchable from the UI dropdown.
   round trip.
 - **Fusion methods:**
   - **RRF** (reciprocal rank fusion): rank-based, ignores incomparable score
-    scales — a robust default.
-  - **Linear**: weighted score blend. `alpha` is the **text** weight —
+    scales. A robust default.
+  - **Linear**: weighted score blend. `alpha` is the **text** weight, so
     `alpha: 0.65` means 65% lexical, 35% semantic.
 - **Text search** comes along for free: the dispatcher's `text` strategy is a
-  plain `TextQuery` (BM25 over `search_text`) — hybrid's lexical leg on its
+  plain `TextQuery` (BM25 over `search_text`): hybrid's lexical leg on its
   own, and your baseline.
 
 ## Your task
@@ -55,8 +55,8 @@ func (s *Service) searchHybrid(ctx context.Context, text string, f *filter.Expre
 Read it as five moves: embed the query (as in Lab 3), build a query with
 *both* legs (lexical text + semantic vector), attach the filter when
 present (hybrid + filters compose!), apply the fusion configured in
-config.yaml, and execute with `s.index.Hybrid` — note: not `Query`;
-`FT.HYBRID` has its own execution path.
+config.yaml, and execute with `s.index.Hybrid` (note: not `Query`;
+`FT.HYBRID` has its own execution path).
 
 ## Checkpoint
 
@@ -65,9 +65,9 @@ three strategies. Good contrasts from the sample's own judged queries:
 
 | Query | What to watch for |
 | --- | --- |
-| `anti fatigue mat` | precise catalog vocabulary — lexical tends to lead |
-| `comfortable chair for long work days` | paraphrased intent — semantic tends to lead |
-| `ergonomic chair` (your followed query) | both legs contribute — where hybrid earns its keep |
+| `anti fatigue mat` | precise catalog vocabulary; lexical tends to lead |
+| `comfortable chair for long work days` | paraphrased intent; semantic tends to lead |
+| `ergonomic chair` (your followed query) | both legs contribute; where hybrid earns its keep |
 
 The footer shows the fusion in play: `hybrid/rrf · flat · all-minilm-l6-v2`.
 
@@ -79,4 +79,4 @@ make verify LAB=5
 Which strategy is *actually* better? You've now formed an opinion from six
 queries. Lab 7 replaces that opinion with numbers.
 
-Next: [Lab 6 — Faceting](lab-6.md)
+Next: [Lab 6: Faceting](lab-6.md)

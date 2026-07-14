@@ -19,9 +19,9 @@ import (
 
 // Relevance grades mapped from the WANDS label column.
 const (
-	GradeExact      = 2 // "Exact" — the product answers the query
-	GradePartial    = 1 // "Partial" — related but not a direct answer
-	GradeIrrelevant = 0 // "Irrelevant" — judged and not relevant
+	GradeExact      = 2 // "Exact": the product answers the query
+	GradePartial    = 1 // "Partial": related but not a direct answer
+	GradeIrrelevant = 0 // "Irrelevant": judged and not relevant
 )
 
 // Product is one WANDS product record plus the derived search_text field.

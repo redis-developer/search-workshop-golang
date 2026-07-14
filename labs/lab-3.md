@@ -1,4 +1,4 @@
-# Lab 3 — Vector Search
+# Lab 3: Vector Search
 
 **Duration:** ~10 minutes
 
@@ -12,10 +12,10 @@ nearest neighbors.
 
 - **KNN vector search:** the query becomes a vector; Redis returns the `k`
   products whose embeddings are closest (cosine distance). No keyword needs
-  to match — “couch” finds sofas.
+  to match: “couch” finds sofas.
 - **Query-side caching:** the query is embedded through the same
   `CachedVectorizer` from Lab 1. The UI searches as you type (debounced), so
-  repeated queries hit the cache — watch the timing drop in the footer.
+  repeated queries hit the cache. Watch the timing drop in the footer.
 - **`vector_distance`:** each result carries its distance; lower is closer.
   It surfaces as `score` in the JSON response.
 
@@ -43,14 +43,14 @@ func (s *Service) searchVector(ctx context.Context, text string, f *filter.Expre
 
 Read it top to bottom: embed the query with the *same cached vectorizer*
 that embedded the products, build a KNN query on the embedding field,
-execute. The filter argument is deliberately ignored — that's Lab 4.
+execute. The filter argument is deliberately ignored; that's Lab 4.
 
 ## Checkpoint
 
 Restart `make run`, open <http://localhost:8081>, and search
-**`ergonomic chair`** — the query you're following.
+**`ergonomic chair`**, the query you're following.
 
-Products appear — and look at *what* appears: office and task chairs,
+Products appear. Look at *what* appears: office and task chairs,
 including ones whose descriptions never contain the word “ergonomic”. The
 footer reads something like:
 
@@ -61,7 +61,7 @@ vector · flat · all-minilm-l6-v2 → 14 ms
 Try paraphrases that showcase semantics: `comfortable chair for long work
 days`, `something soft to sit on`. Then try an exact-vocabulary query like
 `anti fatigue mat` and compare it with a paraphrase (`standing desk floor
-cushion`) — precise catalog terms are where pure vector search starts to
+cushion`). Precise catalog terms are where pure vector search starts to
 wobble. Remember that observation for Lab 5.
 
 ```bash
@@ -69,6 +69,6 @@ make verify LAB=3
 curl -s 'localhost:8081/search?query=ergonomic+chair' | jq '.meta, .matchedProducts[0]'
 ```
 
-(No `jq`? Drop the pipe — the raw JSON is small.)
+(No `jq`? Drop the pipe; the raw JSON is small.)
 
-Next: [Lab 4 — Filtered vector search](lab-4.md)
+Next: [Lab 4: Filtered vector search](lab-4.md)

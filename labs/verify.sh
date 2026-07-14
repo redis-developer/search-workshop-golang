@@ -28,23 +28,23 @@ QUERY="ergonomic%20chair"
 
 case "$LAB" in
   0)
-    [ -f data/corpus.jsonl ] || fail "data/corpus.jsonl missing — run 'make prep'"
-    [ -f data/qrels.txt ]    || fail "data/qrels.txt missing — run 'make prep'"
+    [ -f data/corpus.jsonl ] || fail "data/corpus.jsonl missing; run 'make prep'"
+    [ -f data/qrels.txt ]    || fail "data/qrels.txt missing; run 'make prep'"
     json /healthz "data.get('status') == 'ok'" \
-      || fail "service not answering — run 'make run' in another terminal"
+      || fail "service not answering; run 'make run' in another terminal"
     pass "data prepared, Redis reachable, service up (searches unlock in Lab 1)"
     ;;
   1)
-    json /healthz "data.get('status') == 'ok'" || fail "/healthz not ok — is 'make run' running?"
+    json /healthz "data.get('status') == 'ok'" || fail "/healthz not ok; is 'make run' running?"
     # Lab 1 succeeds when startup got past embedding: cache keys exist.
     docker exec workshop-redis redis-cli --scan --pattern 'embedcache-*' 2>/dev/null | head -1 | grep -q . \
-      || fail "no embedcache-* keys in Redis — embeddings not generated yet (restart 'make run' and watch for the embedding message)"
+      || fail "no embedcache-* keys in Redis; embeddings not generated yet (restart 'make run' and watch for the embedding message)"
     pass "embeddings generated and cached in Redis"
     ;;
   2)
     want=$(wc -l < data/corpus.jsonl | tr -d ' ')
     json /stats "int(float(data.get('num_docs', 0))) == $want" \
-      || fail "/stats does not report $want docs — index not loaded (restart 'make run')"
+      || fail "/stats does not report $want docs; index not loaded (restart 'make run')"
     pid=$(first_product_id)
     [ -n "$pid" ] || fail "could not read a product id from data/corpus.jsonl"
     json "/products/$pid" "'product_name' in data" || fail "/products/$pid not fetchable"
@@ -77,7 +77,7 @@ case "$LAB" in
     pass "facets aggregate the catalog by class"
     ;;
   7|8|9)
-    echo "Labs 7-9 have no automated checkpoint — their output is the point."
+    echo "Labs 7-9 have no automated checkpoint; their output is the point."
     echo "Lab 7: make eval    Lab 8: make reindex-matrix && make study"
     exit 0
     ;;

@@ -19,7 +19,7 @@ type Sample struct {
 // The sampler is query-first:
 //
 //  1. Queries are ranked by how many Exact judgments they have (ties
-//     broken by query ID), and the top queryCount are kept — these are
+//     broken by query ID), and the top queryCount are kept; these are
 //     the queries the evaluation labs can actually score.
 //  2. The product budget is spent round-robin across the kept queries,
 //     each query contributing its judged products best-grade-first. The
@@ -29,7 +29,7 @@ type Sample struct {
 //  3. Any remaining budget is filled with unjudged products in product-ID
 //     order, so vector search has distractors beyond the judged pool.
 //
-// The same inputs always produce the same sample — no seeds, no RNG —
+// The same inputs always produce the same sample (no seeds, no RNG),
 // which keeps every participant's metrics comparable.
 func BuildSample(products []Product, queries []Query, judgments []Judgment, productCount, queryCount int) Sample {
 	byQuery := make(map[string][]Judgment)

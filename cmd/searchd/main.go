@@ -94,7 +94,7 @@ func run(configPath string, reindex, reindexOnly bool, algorithm, model, provide
 
 	errCh := make(chan error, 1)
 	go func() {
-		fmt.Printf("searchd ready — UI and API on http://localhost%s (index %s)\n",
+		fmt.Printf("searchd ready: UI and API on http://localhost%s (index %s)\n",
 			cfg.Server.Addr, cfg.IndexName())
 		errCh <- server.ListenAndServe()
 	}()

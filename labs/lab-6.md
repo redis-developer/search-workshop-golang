@@ -1,4 +1,4 @@
-# Lab 6 — Faceting with Aggregations
+# Lab 6: Faceting with Aggregations
 
 **Duration:** ~10 minutes
 
@@ -11,7 +11,7 @@ ecommerce sidebar (“Sofas (127) · Beds (89) · …”).
 ## Concepts
 
 - **Search vs. aggregation:** `FT.SEARCH` returns documents; `FT.AGGREGATE`
-  returns *computed rows* — group, count, average, sort, all inside Redis.
+  returns *computed rows*: group, count, average, sort, all inside Redis.
 - **The pipeline** you'll build:
 
   ```
@@ -24,14 +24,14 @@ ecommerce sidebar (“Sofas (127) · Beds (89) · …”).
   ```
 
 - **The extension point:** RedisVL for Golang executes any type implementing
-  `query.AggregationQuery` — one method, `AggregateArgs(indexName) []any`.
+  `query.AggregationQuery`, which has one method: `AggregateArgs(indexName) []any`.
   You are about to write your first custom aggregation.
 
 ## Your task
 
 Two copy-paste steps, both in **`internal/search/queries.go`**.
 
-**Step 1** — replace the entire `AggregateArgs` method with:
+**Step 1**: replace the entire `AggregateArgs` method with:
 
 ```go
 // AggregateArgs implements query.AggregationQuery.
@@ -48,11 +48,11 @@ func (q facetQuery) AggregateArgs(indexName string) []any {
 }
 ```
 
-Note the arity numbers after `GROUPBY`, `REDUCE`, and `SORTBY` — they count
+Note the arity numbers after `GROUPBY`, `REDUCE`, and `SORTBY`: they count
 the arguments that follow, and getting them wrong is the classic
 `FT.AGGREGATE` mistake.
 
-**Step 2** — replace the entire `Facets` function with:
+**Step 2**: replace the entire `Facets` function with:
 
 ```go
 // Facets aggregates the catalog by product class.
@@ -82,8 +82,8 @@ func (s *Service) Facets(ctx context.Context, limit int) ([]Facet, error) {
 curl -s 'localhost:8081/facets' | jq '.facets[:5]'
 ```
 
-Expect the sample's biggest classes — Beds, Kitchen Mats, Bar Stools,
-Office Chairs — with counts and average ratings, largest first. Cross-check
+Expect the sample's biggest classes (Beds, Kitchen Mats, Bar Stools,
+Office Chairs) with counts and average ratings, largest first. Cross-check
 one against a filtered search:
 
 ```bash
@@ -99,4 +99,4 @@ make verify LAB=6
 filtered vector, text, hybrid, hybrid+filtered, facets. From here on you
 change *configuration*, not code.
 
-Next: [Lab 7 — Tuning knobs](lab-7.md)
+Next: [Lab 7: Tuning knobs](lab-7.md)

@@ -83,7 +83,7 @@ func (s *Service) Close() error {
 // nothing. Otherwise it:
 //
 //  1. reads the prepared corpus from data/,
-//  2. embeds every product's search_text (Lab 1 — the embeddings cache
+//  2. embeds every product's search_text (Lab 1: the embeddings cache
 //     makes repeat runs nearly free),
 //  3. loads the products as Redis hashes under the config's key prefix
 //     (Lab 2), and
