@@ -24,7 +24,14 @@ from __future__ import annotations
 import json
 import logging
 import os
+import warnings
 from pathlib import Path
+
+# Keep the study output readable in class: ranx ships LaTeX templates that
+# trip SyntaxWarning on import, and redisvl marks its FT.HYBRID query
+# classes experimental (we accept that — the Go side uses FT.HYBRID too).
+warnings.filterwarnings("ignore", category=SyntaxWarning)
+warnings.filterwarnings("ignore", message=".*experimental.*")
 
 import pandas as pd
 from ranx import Run
