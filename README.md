@@ -107,7 +107,7 @@ it could not do before — watch the UI come alive as you go.
 
 Lab instructions live in [`labs/`](labs/).
 
-### Two branches, no juggling
+### Branches
 
 - **`main`** — where you work. Clone it and go: it contains the guided
   gaps for all of Labs 1–6, and every lab doc includes the complete code
@@ -128,8 +128,7 @@ Lab instructions live in [`labs/`](labs/).
    make redis-start
    ```
 
-3. Start with [Lab 0](labs/lab-0.md) — no branch switching needed; `main`
-   is your working branch for the whole workshop.
+3. Start with [Lab 0](labs/lab-0.md). You work on `main` throughout.
 
 ## 🧭 How the Repository Is Laid Out
 

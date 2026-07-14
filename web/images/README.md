@@ -2,7 +2,7 @@
 
 Copy these four files from the Java workshop repository
 ([building-hybrid-search-apps-with-redis](https://github.com/redis-developer/building-hybrid-search-apps-with-redis),
-`app/images/` on any branch):
+`app/images/` on its `main` branch):
 
 - `redis.png` — the logo shown above the search box
 - `apple-touch-icon.webp`
