@@ -5,9 +5,10 @@ import (
 	"testing"
 )
 
+// Count columns are float-formatted ("10.0") in the real WANDS files.
 const productsTSV = "product_id\tproduct_name\tproduct_class\tcategory hierarchy\tproduct_description\tproduct_features\trating_count\taverage_rating\treview_count\n" +
-	"1\tsolid wood platform bed\tBeds\tFurniture/Bedroom Furniture/Beds\ta sturdy bed frame\tcolor:brown|material:wood\t10\t4.5\t8\n" +
-	"2\tvelvet loveseat\tSofas\tFurniture/Living Room Furniture/Sofas\tsoft two-seater\tcolor:green\t3\t3.9\t2\n" +
+	"1\tsolid wood platform bed\tBeds\tFurniture/Bedroom Furniture/Beds\ta sturdy bed frame\tcolor:brown|material:wood\t10.0\t4.5\t8.0\n" +
+	"2\tvelvet loveseat\tSofas\tFurniture/Living Room Furniture/Sofas\tsoft two-seater\tcolor:green\t3.0\t3.9\t2.0\n" +
 	"3\toutdoor patio sofa\tOutdoor Sofas\tOutdoor/Patio Furniture/Sofas\tweather resistant\t\t\t\t\n"
 
 const queriesTSV = "query_id\tquery\tquery_class\n" +

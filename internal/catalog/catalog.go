@@ -97,6 +97,19 @@ func field(record []string, idx map[string]int, name string) string {
 	return strings.TrimSpace(record[i])
 }
 
+// intFromNumeric parses WANDS count columns, which are float-formatted
+// ("98.0") despite being counts. strconv.Atoi would reject them.
+func intFromNumeric(s string) int {
+	if s == "" {
+		return 0
+	}
+	f, err := strconv.ParseFloat(s, 64)
+	if err != nil {
+		return 0
+	}
+	return int(f)
+}
+
 // ParseProducts reads the WANDS product.csv (tab-separated) file.
 func ParseProducts(r io.Reader) ([]Product, error) {
 	cr := tsvReader(r)
@@ -127,8 +140,8 @@ func ParseProducts(r io.Reader) ([]Product, error) {
 			continue
 		}
 		p.AverageRating, _ = strconv.ParseFloat(field(record, idx, "average_rating"), 64)
-		p.RatingCount, _ = strconv.Atoi(field(record, idx, "rating_count"))
-		p.ReviewCount, _ = strconv.Atoi(field(record, idx, "review_count"))
+		p.RatingCount = intFromNumeric(field(record, idx, "rating_count"))
+		p.ReviewCount = intFromNumeric(field(record, idx, "review_count"))
 		p.SearchText = BuildSearchText(p)
 		products = append(products, p)
 	}
