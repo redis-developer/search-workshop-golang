@@ -12,9 +12,7 @@ import (
 
 	"github.com/redis/go-redis/v9"
 
-	"github.com/redis-developer/redis-vl-golang/extensions/cache"
 	"github.com/redis-developer/redis-vl-golang/extensions/vectorize"
-	hf "github.com/redis-developer/redis-vl-golang/extensions/vectorize/hf"
 
 	"github.com/redis-developer/search-workshop-golang/internal/config"
 )
@@ -31,19 +29,23 @@ type Vectorizer struct {
 // stored on client. The cache is keyed by (content, model), so switching
 // models in config.yaml never serves stale vectors.
 func New(ctx context.Context, cfg *config.Config, client redis.UniversalClient) (*Vectorizer, error) {
-	// LAB 1 (reference solution): construct the configured embedding
-	// provider, then wrap it with cache-aside caching.
 	inner, err := newProvider(ctx, cfg)
 	if err != nil {
 		return nil, err
 	}
 
-	embCache := cache.NewEmbeddingsCache(client, cache.EmbeddingsCacheOptions{
-		Name: cfg.CacheName(),
-	})
-	cached := cache.NewCachedVectorizer(inner, embCache)
+	// LAB 1 (part 2): wrap inner with cache-aside caching so repeated
+	// texts are embedded only once:
+	//   embCache := cache.NewEmbeddingsCache(client, cache.EmbeddingsCacheOptions{
+	//       Name: cfg.CacheName(),
+	//   })
+	//   cached := cache.NewCachedVectorizer(inner, embCache)
+	// (import "github.com/redis-developer/redis-vl-golang/extensions/cache")
+	// then put cached (not inner) into the Vectorizer below.
+	// See labs/lab-1.md.
+	_ = client
 
-	v := &Vectorizer{Vectorizer: cached, inner: inner}
+	v := &Vectorizer{Vectorizer: inner, inner: inner}
 	if closer, ok := inner.(interface{ Close() error }); ok {
 		v.closer = closer.Close
 	}
@@ -53,25 +55,24 @@ func New(ctx context.Context, cfg *config.Config, client redis.UniversalClient) 
 // newProvider constructs the raw (uncached) vectorizer for the configured
 // provider.
 func newProvider(ctx context.Context, cfg *config.Config) (vectorize.Vectorizer, error) {
-	switch cfg.Embedding.Provider {
-	case config.ProviderHF:
-		// Local in-process embeddings: the model is downloaded from the
-		// Hugging Face Hub once, cached on disk, and executed through
-		// ONNX Runtime. No API key, no per-call network access.
-		return hf.New(ctx, hf.Config{
-			Model:           cfg.Embedding.Model,
-			BatchSize:       cfg.Embedding.BatchSize,
-			ONNXRuntimePath: onnxRuntimePath(),
-		})
-	case config.ProviderOpenAI:
-		// Hosted embeddings: requires OPENAI_API_KEY in the environment.
-		return vectorize.NewOpenAIVectorizer(ctx, vectorize.OpenAIConfig{
-			Model:     cfg.Embedding.Model,
-			BatchSize: cfg.Embedding.BatchSize,
-		})
-	default:
-		return nil, fmt.Errorf("unknown embedding provider %q", cfg.Embedding.Provider)
-	}
+	// LAB 1 (part 1): construct the configured embedding provider:
+	//
+	//   config.ProviderHF -> local in-process embeddings via ONNX Runtime:
+	//     hf.New(ctx, hf.Config{
+	//         Model:           cfg.Embedding.Model,
+	//         BatchSize:       cfg.Embedding.BatchSize,
+	//         ONNXRuntimePath: onnxRuntimePath(),
+	//     })
+	//     (import hf "github.com/redis-developer/redis-vl-golang/extensions/vectorize/hf")
+	//
+	//   config.ProviderOpenAI -> hosted embeddings (needs OPENAI_API_KEY):
+	//     vectorize.NewOpenAIVectorizer(ctx, vectorize.OpenAIConfig{
+	//         Model:     cfg.Embedding.Model,
+	//         BatchSize: cfg.Embedding.BatchSize,
+	//     })
+	//
+	// See labs/lab-1.md.
+	return nil, fmt.Errorf("LAB 1: embedding provider not implemented — see labs/lab-1.md")
 }
 
 // Close releases provider resources (the hf provider holds an ONNX
