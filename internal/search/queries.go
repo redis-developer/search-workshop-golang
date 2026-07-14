@@ -163,23 +163,16 @@ func (s *Service) searchVector(ctx context.Context, text string, f *filter.Expre
 // searchHybrid fuses a lexical leg and a semantic leg server-side with
 // FT.HYBRID (Lab 5). Fusion method and weights come from config.yaml.
 func (s *Service) searchHybrid(ctx context.Context, text string, f *filter.Expression, k int) ([]map[string]any, error) {
-	vec, err := s.vec.Embed(ctx, text)
-	if err != nil {
-		return nil, fmt.Errorf("embedding query: %w", err)
-	}
-	q := query.NewHybridQuery(text, FieldSearchText, vec, FieldEmbedding).
-		NumResults(k).
-		ReturnFields(returnFields...)
-	if f != nil {
-		q.Filter(f)
-	}
-	switch s.cfg.Search.Hybrid.Fusion {
-	case config.FusionLinear:
-		q.CombineLinear(s.cfg.Search.Hybrid.Alpha)
-	default:
-		q.CombineRRF(s.cfg.Search.Hybrid.RRFWindow, s.cfg.Search.Hybrid.RRFConstant)
-	}
-	return s.index.Hybrid(ctx, q)
+	// LAB 5: fuse a lexical leg and a semantic leg with FT.HYBRID:
+	//   1. embed the query text (as in Lab 3)
+	//   2. query.NewHybridQuery(text, FieldSearchText, vec, FieldEmbedding).
+	//        NumResults(k).ReturnFields(returnFields...)
+	//   3. attach the filter when non-nil (hybrid + filters compose)
+	//   4. apply the configured fusion from s.cfg.Search.Hybrid:
+	//        CombineLinear(alpha) or CombineRRF(window, constant)
+	//   5. execute with s.index.Hybrid(ctx, q) — not Query!
+	// See labs/lab-5.md.
+	return nil, fmt.Errorf("LAB 5: hybrid search not implemented — see labs/lab-5.md")
 }
 
 // buildFilter combines the request's catalog constraints into one filter
