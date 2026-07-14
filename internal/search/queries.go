@@ -153,10 +153,9 @@ func (s *Service) searchVector(ctx context.Context, text string, f *filter.Expre
 	q := query.NewVectorQuery(FieldEmbedding, vec).
 		NumResults(k).
 		ReturnFields(returnFields...)
-	if f != nil {
-		// LAB 4 (reference solution): pre-filter the KNN candidates.
-		q.Filter(f)
-	}
+	// LAB 4: when f is non-nil, pre-filter the KNN candidates with
+	// q.Filter(f). See labs/lab-4.md.
+	_ = f
 	return s.index.Query(ctx, q)
 }
 
@@ -178,24 +177,13 @@ func (s *Service) searchHybrid(ctx context.Context, text string, f *filter.Expre
 // buildFilter combines the request's catalog constraints into one filter
 // expression (Lab 4). Returns nil when unfiltered.
 func buildFilter(req Request) *filter.Expression {
-	var exprs []*filter.Expression
-	if req.Class != "" {
-		exprs = append(exprs, filter.Tag(FieldClass).Eq(req.Class))
-	}
-	if req.MinRating > 0 {
-		exprs = append(exprs, filter.Num(FieldAverageRating).Ge(req.MinRating))
-	}
-	if req.MinReviews > 0 {
-		exprs = append(exprs, filter.Num(FieldReviewCount).Ge(float64(req.MinReviews)))
-	}
-	if len(exprs) == 0 {
-		return nil
-	}
-	out := exprs[0]
-	if len(exprs) > 1 {
-		out = out.And(exprs[1:]...)
-	}
-	return out
+	// LAB 4: translate the request into a filter expression:
+	//   req.Class      -> filter.Tag(FieldClass).Eq(req.Class)
+	//   req.MinRating  -> filter.Num(FieldAverageRating).Ge(req.MinRating)
+	//   req.MinReviews -> filter.Num(FieldReviewCount).Ge(float64(req.MinReviews))
+	// Combine multiple constraints with expr.And(others...); return nil
+	// when no constraint is set. See labs/lab-4.md.
+	return nil
 }
 
 // Facet is one product-class bucket with its document count and average
